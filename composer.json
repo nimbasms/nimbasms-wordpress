@@ -1,0 +1,22 @@
+{
+    "name": "hp/csdf-plugin",
+    "license": "Humanitech",
+    "authors": [
+        {
+            "name": "Mafouz DIALLO",
+            "email": "mafouzdiallo@gmail.com"
+        }
+    ],
+    "require": {
+        "tareq1988/wp-eloquent": "dev-master",
+        "tightenco/collect": "^8.19"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\":"./app"
+        },
+        "files":[
+           
+        ]
+    }
+}
