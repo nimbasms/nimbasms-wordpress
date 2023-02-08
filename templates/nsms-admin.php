@@ -1,6 +1,11 @@
 <?php
-
     global $config;
+    use App\Services\ConfigService;
+    use App\Models\Config;
+
+    if(isset($_POST['Enregistrer'])){
+        ConfigService::save(new Config('1', '2'));        
+    }
 ?>
 
 <div class="container">

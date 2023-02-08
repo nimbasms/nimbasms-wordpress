@@ -1,50 +1,6 @@
 <?php 
 	
     
-    $username = 'aa09fdd60e13a3fac87826d2726ba18a';
-    $password = 'EnBZZsDCgk_E4-FhA1tpGkGqIWoL-wDV5CWB79hfQo1C5S5dEjXKPZUgA5M1pIXQ-y_NBqcyauhGP_n9Cz_yAXNV9OvMzTniLqPZQpwK5fA';
-            
-    $auth = 'Basic '.base64_encode($username.":".$password);
-
-
-    $url = 'https://api.nimbasms.com/v1/messages';
-    $data = array(
-        'sender_name' => 'Nimba API', 
-        'to' => ['623684286'], 
-        'message'=>'Hello, use our NIMBA SMS plugin to send SMS from your wordpress site.'
-    );
-
-    // var_dump( json_encode($data)); die();
-
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Content-Type: application/json',
-      'Authorization: '.$auth
-    ]);
-    $response = curl_exec($curl);
-    curl_close($curl);
-   
-    $products = json_decode($response, true);
-    var_dump($products);
-
-    echo "=======================================================<br/>";
-
-    $url = 'https://api.nimbasms.com/v1/messages';
-    $request_url = $url;
-    $curl = curl_init($request_url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Content-Type: application/json',
-      'Authorization: '.$auth
-    ]);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    
-    $products = json_decode($response, true);
-    var_dump($products); die();
 
 ?>
 <style>
