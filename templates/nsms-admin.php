@@ -3,8 +3,12 @@
     use App\Services\ConfigService;
     use App\Models\Config;
 
+    $credentials = ConfigService::getCredentials();
+
     if(isset($_POST['Enregistrer'])){
-        ConfigService::save(new Config('1', '2'));        
+        $service_id = $_POST['service_id'];
+        $secret_token = $_POST['secret_token'];
+        ConfigService::save(new Config($service_id, $secret_token));        
     }
 ?>
 
@@ -25,12 +29,16 @@
         <div class="col-6">
             <form action="" method="post">
                 <div class="form-group">
-                    <label for="sender_id">Service ID (SID)</label>
-                    <input type="text" name="sender_id" id="sender_id" class="form-control">
+                    <label for="service_id">Service ID (SID)</label>
+                    <input type="text" 
+                        value="<?= $credentials->service_id ?>"
+                        name="service_id" id="service_id" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="token">Secret (Token)</label>
-                    <input type="text" name="token" id="token" class="form-control">
+                    <label for="secret_token">Secret (Token)</label>
+                    <input type="text" 
+                        value="<?= $credentials->secret_token ?>"
+                        name="secret_token" id="secret_token" class="form-control">
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Enregistrer" name="Enregistrer" class="btn btn-primary mt-2">
