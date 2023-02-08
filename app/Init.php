@@ -1,11 +1,10 @@
 <?php
 
-namespace Inc;
+namespace App;
 
 use App\Pages\Admin;
 
 use App\Base\Enqueue;
-use App\Models\Document;
 use App\Base\SettingsLinks;
 
 final class Init {

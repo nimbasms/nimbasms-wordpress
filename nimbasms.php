@@ -45,8 +45,8 @@ function deactivate_nimbasms_plugin(){
     \App\Base\Deactivate::deactivate();
 }
 
-if( class_exists('App\Init')){
-    App\Init::register_service();
+if( class_exists('\App\Init')){
+    \App\Init::register_service();
 }
 
 
