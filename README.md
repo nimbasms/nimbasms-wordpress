@@ -1,6 +1,8 @@
 # Nimba SMS for WordPress
 
-Extension WordPress officielle de [Nimba SMS](https://www.nimbasms.com) — envoyez des SMS professionnels avec le nom de votre entreprise, directement depuis WordPress.
+Extension WordPress officielle de [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises (SMS, WhatsApp, e-mail — et d'autres canaux à venir). Cette extension couvre le canal SMS : envoyez des SMS avec le nom de votre entreprise comme expéditeur, directement depuis WordPress.
+
+Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 
 [![WordPress Plugin](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/plugins/nimbasms/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](LICENSE)

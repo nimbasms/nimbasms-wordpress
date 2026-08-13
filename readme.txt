@@ -8,11 +8,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Envoyez des SMS professionnels depuis WordPress via Nimba SMS : notifications WooCommerce, alertes admin, envoi manuel et journal des envois.
+Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle des entreprises : notifications WooCommerce, alertes et SMS.
 
 == Description ==
 
-**Nimba SMS** connecte votre site WordPress à la plateforme [Nimba SMS](https://www.nimbasms.com), leader de l'envoi de SMS professionnels en Guinée, pour envoyer des SMS avec le nom de votre entreprise comme expéditeur.
+**Nimba SMS** connecte votre site WordPress à [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises, qui prend en charge le SMS, WhatsApp et l'e-mail (et d'autres canaux à venir). Cette extension couvre le canal SMS : envoyez des SMS avec le nom de votre entreprise comme expéditeur, directement depuis WordPress. Les autres canaux seront ajoutés dans les prochaines versions.
 
 = Fonctionnalités =
 
@@ -52,6 +52,10 @@ Oui. Les fonctions WooCommerce ne s'affichent que si WooCommerce est actif.
 = Puis-je envoyer des SMS depuis mon propre code ? =
 
 Oui : `nimbasms_send( '624000000', 'Mon message' );` — des filtres et actions sont disponibles pour personnaliser les envois.
+
+= L'extension gère-t-elle WhatsApp et l'e-mail ? =
+
+La plateforme Nimba SMS les prend en charge ; cette extension couvre le SMS aujourd'hui, les autres canaux arriveront dans les prochaines versions.
 
 = Quels pays sont couverts ? =
 

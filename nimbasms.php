@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Nimba SMS
  * Plugin URI:        https://github.com/nimbasms/nimbasms-wordpress
- * Description:       Envoyez des SMS professionnels depuis WordPress via l'API Nimba SMS : notifications, WooCommerce, envoi manuel et journal des envois.
+ * Description:       Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle des entreprises (SMS, WhatsApp, e-mail) : notifications WooCommerce, alertes, envoi de SMS et journal.
  * Version:           1.0.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
