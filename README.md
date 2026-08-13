@@ -1,0 +1,65 @@
+# Nimba SMS for WordPress
+
+Extension WordPress officielle de [Nimba SMS](https://www.nimbasms.com) — envoyez des SMS professionnels avec le nom de votre entreprise, directement depuis WordPress.
+
+[![WordPress Plugin](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/plugins/nimbasms/)
+[![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](LICENSE)
+
+## Fonctionnalités
+
+- **WooCommerce** — SMS au client aux changements de statut de commande (modèles personnalisables avec variables `{order_id}`, `{total}`…) et SMS à l'administrateur à chaque nouvelle commande
+- **Notifications WordPress** — nouvelle inscription, nouveau commentaire
+- **Envoi manuel** de SMS depuis l'administration
+- **Journal des envois** avec statuts
+- **Solde du compte** affiché en temps réel
+- **API développeur** — `nimbasms_send( $to, $message )` + hooks
+
+## Installation
+
+Depuis l'admin WordPress : **Extensions → Ajouter → rechercher « Nimba SMS » → Installer**.
+
+Ou manuellement :
+
+```bash
+cd wp-content/plugins
+git clone https://github.com/nimbasms/nimbasms-wordpress.git nimbasms
+```
+
+Puis activez l'extension et renseignez vos identifiants (menu **Nimba SMS**). Identifiants disponibles sur votre compte Nimba SMS, documentation sur [developers.nimbasms.com](https://developers.nimbasms.com).
+
+## Pour les développeurs
+
+```php
+// Envoi simple
+nimbasms_send( '624000000', 'Bonjour depuis WordPress !' );
+
+// Envoi multiple avec nom d'expéditeur spécifique
+nimbasms_send( array( '624000000', '625000000' ), 'Message', 'MASOCIETE' );
+```
+
+Hooks disponibles :
+
+| Hook | Type | Description |
+|---|---|---|
+| `nimbasms_send_payload` | filtre | Modifier la charge utile avant envoi |
+| `nimbasms_after_send` | action | Après chaque tentative d'envoi |
+| `nimbasms_wc_templates` | filtre | Statuts WooCommerce déclencheurs et leurs modèles |
+| `nimbasms_user_phone` | filtre | Résolution du numéro d'un utilisateur |
+| `nimbasms_normalize_number` | filtre | Normalisation des numéros |
+
+## Développement
+
+```bash
+composer install        # outils de dev (PHPCS + WordPress Coding Standards)
+composer run lint       # vérification des standards
+```
+
+Le déploiement vers le SVN wordpress.org est automatisé par GitHub Actions à chaque release (tag `vX.Y.Z`).
+
+## Contribuer
+
+Les pull requests sont bienvenues. Consultez les [guidelines de l'organisation](https://github.com/nimbasms/.github).
+
+## Licence
+
+[GPLv2 or later](LICENSE)

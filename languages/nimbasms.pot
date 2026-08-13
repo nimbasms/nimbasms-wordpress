@@ -1,0 +1,13 @@
+# Copyright (C) 2026 Nimba SMS
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Nimba SMS 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/nimbasms/nimbasms-wordpress/issues\n"
+"Language-Team: Nimba SMS <open-source@nimbasms.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-13T00:00:00+00:00\n"
+"X-Generator: manual\n"
+"X-Domain: nimbasms\n"
