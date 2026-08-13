@@ -1,8 +1,8 @@
 === Nimba SMS ===
 Contributors: nimbasms
-Tags: sms, woocommerce, notifications, guinea, otp
+Tags: sms, woocommerce, notifications, guinea
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -29,7 +29,7 @@ Un compte [Nimba SMS](https://www.nimbasms.com) avec un nom d'expéditeur approu
 
 = Service externe =
 
-Ce plugin communique avec l'API Nimba SMS (https://api.nimbasms.com) pour envoyer les SMS et récupérer le solde et les noms d'expéditeur de votre compte. Les données transmises sont : vos identifiants API, les numéros de téléphone destinataires et le contenu des messages. Voir les [conditions d'utilisation](https://www.nimbasms.com/terms/) et la [politique de confidentialité](https://www.nimbasms.com/privacy/) de Nimba SMS.
+Ce plugin communique avec l'API Nimba SMS (https://api.nimbasms.com) pour envoyer les SMS et récupérer le solde et les noms d'expéditeur de votre compte. Les données transmises sont : vos identifiants API, les numéros de téléphone destinataires et le contenu des messages. Voir les [conditions générales d'utilisation de Nimba SMS](https://www.nimbasms.com/conditions-generales-d-utilisation).
 
 == Installation ==
 
