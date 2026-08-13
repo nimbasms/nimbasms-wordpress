@@ -6,4 +6,4 @@ Placer ici (déployés automatiquement par la GitHub Action) :
 - `banner-772x250.png` et `banner-1544x500.png` — bannière
 - `screenshot-1.png` … `screenshot-4.png` — captures (ordre = readme.txt)
 
-Charte : bleu Nimba `#5271ff`, logo Nimba SMS.
+Charte : bleu Nimba `#375CA7` (bleu du logo officiel), logo Nimba SMS.
