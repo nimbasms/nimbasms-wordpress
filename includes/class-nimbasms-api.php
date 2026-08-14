@@ -52,13 +52,18 @@ class NimbaSMS_API {
 
 		$creds = self::credentials();
 
+		global $wp_version;
+
 		$args = array(
-			'method'  => $method,
-			'timeout' => 20,
-			'headers' => array(
-				'Authorization' => 'Basic ' . base64_encode( $creds['service_id'] . ':' . $creds['secret_token'] ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-				'Accept'        => 'application/json',
-				'Content-Type'  => 'application/json',
+			'method'     => $method,
+			'timeout'    => 20,
+			'user-agent' => 'NimbaSMS-WordPress/' . NIMBASMS_VERSION . ' (WordPress/' . $wp_version . '; PHP/' . PHP_VERSION . '; +https://github.com/nimbasms/nimbasms-wordpress)',
+			'headers'    => array(
+				'Authorization'         => 'Basic ' . base64_encode( $creds['service_id'] . ':' . $creds['secret_token'] ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+				'Accept'                => 'application/json',
+				'Content-Type'          => 'application/json',
+				'X-Nimba-Client'        => 'wordpress-plugin',
+				'X-Nimba-Client-Version' => NIMBASMS_VERSION,
 			),
 		);
 
