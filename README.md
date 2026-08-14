@@ -9,7 +9,7 @@ Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 
 ## Fonctionnalités
 
-- **WooCommerce** — SMS ou WhatsApp au client aux changements de statut de commande (modèles avec variables `{order_id}`, `{total}`…, repli SMS automatique si WhatsApp échoue) et SMS à l'administrateur à chaque nouvelle commande
+- **WooCommerce** — SMS et/ou WhatsApp au client par statut de commande (les deux canaux sont cumulables ; repli SMS automatique si WhatsApp seul échoue), modèles avec variables `{order_id}`, `{total}`…, et SMS à l'administrateur à chaque nouvelle commande
 - **WhatsApp** — envoi via templates WhatsApp Business approuvés par Meta, variables dynamiques passées dans l'ordre du template (en canal WhatsApp, seul le template est envoyé)
 - **Notifications WordPress** — nouvelle inscription, nouveau commentaire
 - **Envoi manuel** de SMS depuis l'administration

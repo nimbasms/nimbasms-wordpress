@@ -76,17 +76,22 @@ class NimbaSMS_Admin {
 			$settings['notify_new_user']           = ! empty( $_POST['notify_new_user'] ) ? 1 : 0;
 			$settings['notify_new_comment']        = ! empty( $_POST['notify_new_comment'] ) ? 1 : 0;
 			$settings['wc_notify_admin_new_order'] = ! empty( $_POST['wc_notify_admin_new_order'] ) ? 1 : 0;
-			$settings['wc_notify_customer_status'] = ! empty( $_POST['wc_notify_customer_status'] ) ? 1 : 0;
 
 			$settings['wa_enabled']          = ! empty( $_POST['wa_enabled'] ) ? 1 : 0;
 			$settings['wa_default_template'] = isset( $_POST['wa_default_template'] ) ? sanitize_text_field( wp_unslash( $_POST['wa_default_template'] ) ) : '';
 
-			$settings['wc_channels']     = array();
+			$settings['wc_sms_enabled']  = array();
+			$settings['wc_wa_enabled']   = array();
 			$settings['wa_wc_templates'] = array();
 			$settings['wa_wc_variables'] = array();
-			if ( isset( $_POST['wc_channels'] ) && is_array( $_POST['wc_channels'] ) ) {
-				foreach ( wp_unslash( $_POST['wc_channels'] ) as $status => $channel ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-					$settings['wc_channels'][ sanitize_key( $status ) ] = in_array( $channel, array( 'sms', 'whatsapp' ), true ) ? $channel : 'sms';
+			if ( isset( $_POST['wc_sms_enabled'] ) && is_array( $_POST['wc_sms_enabled'] ) ) {
+				foreach ( array_keys( wp_unslash( $_POST['wc_sms_enabled'] ) ) as $status ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$settings['wc_sms_enabled'][ sanitize_key( $status ) ] = 1;
+				}
+			}
+			if ( isset( $_POST['wc_wa_enabled'] ) && is_array( $_POST['wc_wa_enabled'] ) ) {
+				foreach ( array_keys( wp_unslash( $_POST['wc_wa_enabled'] ) ) as $status ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$settings['wc_wa_enabled'][ sanitize_key( $status ) ] = 1;
 				}
 			}
 			if ( isset( $_POST['wa_wc_templates'] ) && is_array( $_POST['wa_wc_templates'] ) ) {
@@ -316,54 +321,51 @@ class NimbaSMS_Admin {
 				<h2><?php esc_html_e( 'WooCommerce', 'nimbasms' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Notifications', 'nimbasms' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Administrateur', 'nimbasms' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="wc_notify_admin_new_order" value="1" <?php checked( $get( 'wc_notify_admin_new_order' ) ); ?>> <?php esc_html_e( 'SMS à l’administrateur à chaque nouvelle commande', 'nimbasms' ); ?></label><br>
-							<label><input type="checkbox" name="wc_notify_customer_status" value="1" <?php checked( $get( 'wc_notify_customer_status' ) ); ?>> <?php esc_html_e( 'SMS au client aux changements de statut de commande', 'nimbasms' ); ?></label>
+							<label><input type="checkbox" name="wc_notify_admin_new_order" value="1" <?php checked( $get( 'wc_notify_admin_new_order' ) ); ?>> <?php esc_html_e( 'SMS à l’administrateur à chaque nouvelle commande', 'nimbasms' ); ?></label>
 						</td>
 					</tr>
-					<?php
-					$wc_templates = wp_parse_args( (array) $get( 'wc_templates', array() ), NimbaSMS_WooCommerce::default_templates() );
-					foreach ( NimbaSMS_WooCommerce::default_templates() as $status => $default_tpl ) :
-						?>
-						<tr>
-							<th scope="row">
-								<label for="wc_tpl_<?php echo esc_attr( $status ); ?>">
-									<?php
-									printf(
-										/* translators: %s: WooCommerce order status. */
-										esc_html__( 'Modèle « %s »', 'nimbasms' ),
-										esc_html( function_exists( 'wc_get_order_status_name' ) ? wc_get_order_status_name( $status ) : $status )
-									);
-									?>
-								</label>
-							</th>
-							<td>
-								<?php
-								$chan       = isset( $settings['wc_channels'][ $status ] ) ? $settings['wc_channels'][ $status ] : 'sms';
-								$wa_tpl     = isset( $settings['wa_wc_templates'][ $status ] ) ? $settings['wa_wc_templates'][ $status ] : '';
-								$wa_vars    = isset( $settings['wa_wc_variables'][ $status ] ) ? $settings['wa_wc_variables'][ $status ] : '';
-								?>
-								<p>
-									<label>
-										<?php esc_html_e( 'Canal :', 'nimbasms' ); ?>
-										<select name="wc_channels[<?php echo esc_attr( $status ); ?>]">
-											<option value="sms" <?php selected( $chan, 'sms' ); ?>><?php esc_html_e( 'SMS', 'nimbasms' ); ?></option>
-											<option value="whatsapp" <?php selected( $chan, 'whatsapp' ); ?>><?php esc_html_e( 'WhatsApp (repli SMS en cas d’échec)', 'nimbasms' ); ?></option>
-										</select>
-									</label>
-								</p>
-								<textarea name="wc_templates[<?php echo esc_attr( $status ); ?>]" id="wc_tpl_<?php echo esc_attr( $status ); ?>" class="large-text" rows="2"><?php echo esc_textarea( $wc_templates[ $status ] ); ?></textarea>
-								<p class="description"><?php esc_html_e( 'Message SMS (et repli WhatsApp). Variables : {site} {order_id} {total} {first_name} {last_name} {status}', 'nimbasms' ); ?></p>
-								<p>
-									<input type="text" name="wa_wc_templates[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_tpl ); ?>" placeholder="<?php esc_attr_e( 'Template WhatsApp (si canal WhatsApp)', 'nimbasms' ); ?>">
-									<input type="text" name="wa_wc_variables[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_vars ); ?>" placeholder="{order_id}|{total}">
-								</p>
-								<p class="description"><?php esc_html_e( 'Template WhatsApp : obligatoire si le canal WhatsApp est choisi pour ce statut (sinon repli SMS). Variables : facultatives, séparées par | et dans l’ordre des variables du template. En canal WhatsApp, le message ci-dessus ne sert que de repli SMS.', 'nimbasms' ); ?></p>
-							</td>
-						</tr>
-					<?php endforeach; ?>
 				</table>
+
+				<h3><?php esc_html_e( 'Messages au client par statut de commande', 'nimbasms' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'Pour chaque statut, activez le SMS, WhatsApp, ou les deux. Si seul WhatsApp est activé et que l’envoi échoue, le message SMS est envoyé en repli.', 'nimbasms' ); ?></p>
+
+				<?php
+				$wc_templates = wp_parse_args( (array) $get( 'wc_templates', array() ), NimbaSMS_WooCommerce::default_templates() );
+				foreach ( NimbaSMS_WooCommerce::default_templates() as $status => $default_tpl ) :
+					$sms_on  = ! empty( $settings['wc_sms_enabled'][ $status ] );
+					$wa_on   = ! empty( $settings['wc_wa_enabled'][ $status ] );
+					$wa_tpl  = isset( $settings['wa_wc_templates'][ $status ] ) ? $settings['wa_wc_templates'][ $status ] : '';
+					$wa_vars = isset( $settings['wa_wc_variables'][ $status ] ) ? $settings['wa_wc_variables'][ $status ] : '';
+					?>
+					<div style="border:1px solid #c3c4c7;border-radius:4px;background:#fff;margin:16px 0;max-width:1100px;">
+						<div style="padding:10px 16px;border-bottom:1px solid #c3c4c7;background:#f6f7f7;font-weight:600;">
+							<?php echo esc_html( function_exists( 'wc_get_order_status_name' ) ? wc_get_order_status_name( $status ) : $status ); ?>
+						</div>
+						<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+							<div style="padding:14px 16px;border-right:1px solid #e0e0e0;">
+								<p style="margin-top:0;">
+									<label><input type="checkbox" name="wc_sms_enabled[<?php echo esc_attr( $status ); ?>]" value="1" <?php checked( $sms_on ); ?>> <strong><?php esc_html_e( 'Envoyer par SMS', 'nimbasms' ); ?></strong></label>
+								</p>
+								<textarea name="wc_templates[<?php echo esc_attr( $status ); ?>]" class="large-text" rows="3"><?php echo esc_textarea( $wc_templates[ $status ] ); ?></textarea>
+								<p class="description"><?php esc_html_e( 'Variables : {site} {order_id} {total} {first_name} {last_name} {status}', 'nimbasms' ); ?></p>
+							</div>
+							<div style="padding:14px 16px;">
+								<p style="margin-top:0;">
+									<label><input type="checkbox" name="wc_wa_enabled[<?php echo esc_attr( $status ); ?>]" value="1" <?php checked( $wa_on ); ?>> <strong><?php esc_html_e( 'Envoyer par WhatsApp', 'nimbasms' ); ?></strong></label>
+								</p>
+								<p style="margin:0 0 8px;">
+									<input type="text" name="wa_wc_templates[<?php echo esc_attr( $status ); ?>]" class="large-text" value="<?php echo esc_attr( $wa_tpl ); ?>" placeholder="<?php esc_attr_e( 'Nom du template approuvé', 'nimbasms' ); ?>">
+								</p>
+								<p style="margin:0;">
+									<input type="text" name="wa_wc_variables[<?php echo esc_attr( $status ); ?>]" class="large-text" value="<?php echo esc_attr( $wa_vars ); ?>" placeholder="{order_id}|{total}">
+								</p>
+								<p class="description"><?php esc_html_e( 'Variables séparées par |, dans l’ordre du template. Template requis si WhatsApp est activé.', 'nimbasms' ); ?></p>
+							</div>
+						</div>
+					</div>
+				<?php endforeach; ?>
 			<?php endif; ?>
 
 			<p class="submit">

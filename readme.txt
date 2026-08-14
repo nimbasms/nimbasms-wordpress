@@ -16,7 +16,7 @@ Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle
 
 = Fonctionnalités =
 
-* **WooCommerce** : SMS ou message WhatsApp automatique au client aux changements de statut de commande (confirmée, terminée, annulée) avec modèles personnalisables, et SMS à l'administrateur à chaque nouvelle commande. En canal WhatsApp, repli automatique en SMS si l'envoi échoue.
+* **WooCommerce** : pour chaque statut de commande (confirmée, terminée, annulée), activez le SMS, WhatsApp, ou les deux, avec modèles personnalisables. Si seul WhatsApp est activé et que l'envoi échoue, repli automatique en SMS. SMS à l'administrateur à chaque nouvelle commande.
 * **WhatsApp** : envoi via vos templates WhatsApp Business approuvés par Meta (créés depuis votre dashboard Nimba SMS), avec variables dynamiques.
 * **Notifications WordPress** : SMS à l'administrateur lors d'une nouvelle inscription ou d'un nouveau commentaire.
 * **Envoi manuel** : envoyez un SMS à un ou plusieurs numéros directement depuis l'administration.

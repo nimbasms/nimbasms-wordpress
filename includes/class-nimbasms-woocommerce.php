@@ -24,7 +24,7 @@ class NimbaSMS_WooCommerce {
 			add_action( 'woocommerce_new_order', array( __CLASS__, 'notify_admin_new_order' ), 10, 1 );
 		}
 
-		if ( ! empty( $settings['wc_notify_customer_status'] ) ) {
+		if ( ! empty( $settings['wc_sms_enabled'] ) || ! empty( $settings['wc_wa_enabled'] ) ) {
 			add_action( 'woocommerce_order_status_changed', array( __CLASS__, 'notify_customer_status' ), 10, 4 );
 		}
 	}
@@ -132,14 +132,18 @@ class NimbaSMS_WooCommerce {
 			return;
 		}
 
+		$settings = get_option( 'nimbasms_settings', array() );
+		$sms_on   = ! empty( $settings['wc_sms_enabled'][ $new_status ] );
+		$wa_on    = ! empty( $settings['wa_enabled'] ) && ! empty( $settings['wc_wa_enabled'][ $new_status ] );
+
+		if ( ! $sms_on && ! $wa_on ) {
+			return;
+		}
+
 		$message = self::render( $templates[ $new_status ], $order );
 
-		// Channel per status: sms (default) or whatsapp (with SMS fallback on error).
-		$settings   = get_option( 'nimbasms_settings', array() );
-		$channel    = isset( $settings['wc_channels'][ $new_status ] ) ? $settings['wc_channels'][ $new_status ] : 'sms';
-		$wa_enabled = ! empty( $settings['wa_enabled'] );
-
-		if ( 'whatsapp' === $channel && $wa_enabled ) {
+		$wa_sent = false;
+		if ( $wa_on ) {
 			$template_name = isset( $settings['wa_wc_templates'][ $new_status ] ) ? trim( (string) $settings['wa_wc_templates'][ $new_status ] ) : '';
 			$vars_spec     = isset( $settings['wa_wc_variables'][ $new_status ] ) ? (string) $settings['wa_wc_variables'][ $new_status ] : '';
 
@@ -149,15 +153,15 @@ class NimbaSMS_WooCommerce {
 					$variables[] = self::render( $token, $order );
 				}
 
-				$result = nimbasms_send_whatsapp( $phone, $template_name, $variables );
-
-				if ( ! is_wp_error( $result ) ) {
-					return;
-				}
-				// WhatsApp failed: fall through to SMS fallback below.
+				$result  = nimbasms_send_whatsapp( $phone, $template_name, $variables );
+				$wa_sent = ! is_wp_error( $result );
 			}
 		}
 
-		nimbasms_send( $phone, $message );
+		// SMS: sent when enabled, or as fallback when WhatsApp was the only channel and failed.
+		if ( $sms_on || ( $wa_on && ! $wa_sent ) ) {
+			nimbasms_send( $phone, $message );
+		}
 	}
+
 }
