@@ -61,17 +61,36 @@ class NimbaSMS_Webhook {
 
 	/**
 	 * Register the REST route.
+	 *
+	 * GET  — reachability check: Nimba SMS validates the URL with a GET and expects a 200.
+	 * POST — actual status notifications (secured by the shared-secret token).
 	 */
 	public static function register_route() {
 		register_rest_route(
 			'nimbasms/v1',
 			'/webhook',
 			array(
-				'methods'             => 'POST',
-				'callback'            => array( __CLASS__, 'handle' ),
-				'permission_callback' => array( __CLASS__, 'verify' ),
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( __CLASS__, 'ping' ),
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => 'POST',
+					'callback'            => array( __CLASS__, 'handle' ),
+					'permission_callback' => array( __CLASS__, 'verify' ),
+				),
 			)
 		);
+	}
+
+	/**
+	 * Reachability check response (200 OK). No data is exposed and nothing is written.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function ping() {
+		return new WP_REST_Response( array( 'status' => 'OK' ), 200 );
 	}
 
 	/**
