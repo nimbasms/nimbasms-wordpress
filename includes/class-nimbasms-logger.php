@@ -82,6 +82,25 @@ class NimbaSMS_Logger {
 	}
 
 	/**
+	 * Update the status of a logged message by its API message id.
+	 *
+	 * @param string $message_id API message UUID.
+	 * @param string $status     New delivery status.
+	 * @return int|false Number of rows updated, or false on error.
+	 */
+	public static function update_status( $message_id, $status ) {
+		global $wpdb;
+
+		return $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			self::table(),
+			array( 'status' => sanitize_key( $status ) ),
+			array( 'message_id' => sanitize_text_field( $message_id ) ),
+			array( '%s' ),
+			array( '%s' )
+		);
+	}
+
+	/**
 	 * Fetch recent log entries.
 	 *
 	 * @param int $limit Number of rows.

@@ -117,6 +117,12 @@ class NimbaSMS_Admin {
 			add_settings_error( 'nimbasms', 'saved', __( 'Réglages enregistrés.', 'nimbasms' ), 'success' );
 		}
 
+		// Regenerate webhook secret.
+		if ( isset( $_POST['nimbasms_regen_webhook'] ) && check_admin_referer( 'nimbasms_regen_webhook', 'nimbasms_nonce' ) ) {
+			NimbaSMS_Webhook::regenerate_secret();
+			add_settings_error( 'nimbasms', 'webhook_regen', __( 'URL de webhook régénérée. Mettez-la à jour dans votre dashboard Nimba SMS.', 'nimbasms' ), 'success' );
+		}
+
 		// Manual send.
 		if ( isset( $_POST['nimbasms_manual_send'] ) && check_admin_referer( 'nimbasms_manual_send', 'nimbasms_nonce' ) ) {
 			$to      = isset( $_POST['sms_to'] ) ? sanitize_text_field( wp_unslash( $_POST['sms_to'] ) ) : '';
@@ -371,6 +377,18 @@ class NimbaSMS_Admin {
 			<p class="submit">
 				<button type="submit" name="nimbasms_save_settings" value="1" class="button button-primary"><?php esc_html_e( 'Enregistrer les réglages', 'nimbasms' ); ?></button>
 			</p>
+		</form>
+
+		<h2><?php esc_html_e( 'Webhook de statut de livraison', 'nimbasms' ); ?></h2>
+		<p class="description" style="max-width:760px;">
+			<?php esc_html_e( 'Pour que le journal se mette à jour automatiquement (envoyé, reçu, échec…), copiez cette URL dans votre dashboard Nimba SMS, section API KEYS → Webhooks. Nimba SMS l’appellera à chaque changement de statut d’un message.', 'nimbasms' ); ?>
+		</p>
+		<p>
+			<input type="text" readonly class="large-text code" style="max-width:760px;" value="<?php echo esc_attr( NimbaSMS_Webhook::url() ); ?>" onclick="this.select();">
+		</p>
+		<form method="post" style="display:inline;">
+			<?php wp_nonce_field( 'nimbasms_regen_webhook', 'nimbasms_nonce' ); ?>
+			<button type="submit" name="nimbasms_regen_webhook" value="1" class="button" onclick="return confirm('<?php echo esc_js( __( 'Régénérer l’URL ? L’ancienne cessera de fonctionner.', 'nimbasms' ) ); ?>');"><?php esc_html_e( 'Régénérer l’URL', 'nimbasms' ); ?></button>
 		</form>
 		<?php
 	}

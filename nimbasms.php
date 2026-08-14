@@ -27,6 +27,7 @@ define( 'NIMBASMS_API_BASE', 'https://api.nimbasms.com/v1' );
 require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-api.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-logger.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-notifications.php';
+require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-webhook.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/functions.php';
 
 if ( is_admin() ) {
@@ -65,6 +66,7 @@ final class NimbaSMS_Plugin {
 		add_action( 'plugins_loaded', array( $this, 'maybe_load_woocommerce' ), 20 );
 
 		NimbaSMS_Notifications::init();
+		NimbaSMS_Webhook::init();
 
 		if ( is_admin() ) {
 			NimbaSMS_Admin::init();
