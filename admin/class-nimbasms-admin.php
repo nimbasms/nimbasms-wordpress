@@ -195,8 +195,8 @@ class NimbaSMS_Admin {
 	 */
 	private static function render_settings_tab() {
 		$settings = get_option( 'nimbasms_settings', array() );
-		$get      = function ( $key, $default = '' ) use ( $settings ) {
-			return isset( $settings[ $key ] ) ? $settings[ $key ] : $default;
+		$get      = function ( $key, $default_value = '' ) use ( $settings ) {
+			return isset( $settings[ $key ] ) ? $settings[ $key ] : $default_value;
 		};
 
 		$sms_balance = null;
