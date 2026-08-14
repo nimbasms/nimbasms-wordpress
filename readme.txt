@@ -64,10 +64,10 @@ See the network coverage on www.nimbasms.com.
 
 == Screenshots ==
 
-1. Settings: API credentials, balances and sender name.
-2. WooCommerce notifications with per-status SMS and WhatsApp columns.
-3. Manual sending from the admin.
-4. Send log with delivery statuses.
+1. Settings: API credentials, live SMS and WhatsApp balances, sender name and notifications.
+2. WooCommerce: per-order-status panels with side-by-side SMS and WhatsApp columns.
+3. Manual sending with channel selection.
+4. Send log with real-time delivery statuses (via the delivery webhook).
 
 == Changelog ==
 
