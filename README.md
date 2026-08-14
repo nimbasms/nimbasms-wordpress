@@ -10,7 +10,7 @@ Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 ## Fonctionnalités
 
 - **WooCommerce** — SMS ou WhatsApp au client aux changements de statut de commande (modèles avec variables `{order_id}`, `{total}`…, repli SMS automatique si WhatsApp échoue) et SMS à l'administrateur à chaque nouvelle commande
-- **WhatsApp** — envoi via templates WhatsApp Business approuvés par Meta, variables dynamiques `{{1}}`, `{{2}}`…
+- **WhatsApp** — envoi via templates WhatsApp Business approuvés par Meta, variables dynamiques passées dans l'ordre du template (en canal WhatsApp, seul le template est envoyé)
 - **Notifications WordPress** — nouvelle inscription, nouveau commentaire
 - **Envoi manuel** de SMS depuis l'administration
 - **Journal des envois** avec statuts
@@ -39,7 +39,7 @@ nimbasms_send( '624000000', 'Bonjour depuis WordPress !' );
 // SMS multiple avec nom d'expéditeur spécifique
 nimbasms_send( array( '624000000', '625000000' ), 'Message', 'MASOCIETE' );
 
-// WhatsApp via template approuvé ({{1}} => 'Fodé', {{2}} => '45 000 GNF')
+// WhatsApp via template approuvé — variables dans l'ordre du template
 nimbasms_send_whatsapp( '624000000', 'commande_confirmee', array( 'Fodé', '45 000 GNF' ) );
 ```
 

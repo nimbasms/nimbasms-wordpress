@@ -359,7 +359,7 @@ class NimbaSMS_Admin {
 									<input type="text" name="wa_wc_templates[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_tpl ); ?>" placeholder="<?php esc_attr_e( 'Template WhatsApp (si canal WhatsApp)', 'nimbasms' ); ?>">
 									<input type="text" name="wa_wc_variables[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_vars ); ?>" placeholder="{order_id}|{total}">
 								</p>
-								<p class="description"><?php esc_html_e( 'Template WhatsApp : obligatoire si le canal WhatsApp est choisi pour ce statut (sinon repli SMS). Variables : facultatives, séparées par | et dans l’ordre de {{1}}, {{2}}, …', 'nimbasms' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Template WhatsApp : obligatoire si le canal WhatsApp est choisi pour ce statut (sinon repli SMS). Variables : facultatives, séparées par | et dans l’ordre des variables du template. En canal WhatsApp, le message ci-dessus ne sert que de repli SMS.', 'nimbasms' ); ?></p>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -406,8 +406,8 @@ class NimbaSMS_Admin {
 					<th scope="row"><?php esc_html_e( 'Template WhatsApp', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></th>
 					<td>
 						<input type="text" name="wa_template" class="regular-text" placeholder="<?php esc_attr_e( 'Nom du template validé', 'nimbasms' ); ?>">
-						<input type="text" name="wa_variables" class="regular-text" placeholder="<?php esc_attr_e( 'Variables séparées par | (ordre de {{1}}, {{2}}…)', 'nimbasms' ); ?>">
-						<p class="description"><?php esc_html_e( 'Nom du template : obligatoire. Variables : facultatives selon le template.', 'nimbasms' ); ?></p>
+						<input type="text" name="wa_variables" class="regular-text" placeholder="<?php esc_attr_e( 'Variables séparées par | (dans l’ordre du template)', 'nimbasms' ); ?>">
+						<p class="description"><?php esc_html_e( 'Nom du template : obligatoire. Variables : facultatives selon le template, passées dans l’ordre. En WhatsApp, le champ Message est ignoré — seul le template est envoyé.', 'nimbasms' ); ?></p>
 					</td>
 				</tr>
 			</table>

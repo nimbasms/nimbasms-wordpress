@@ -146,8 +146,9 @@ class NimbaSMS_API {
 	 *
 	 * @param string|array $to            One number or a list of numbers.
 	 * @param string       $template_name Approved WhatsApp template name.
-	 * @param array        $variables     Ordered body variable values, e.g. array( 'valeur 1', 'valeur 2' )
+	 * @param array        $variables     Ordered variable values, e.g. array( 'valeur 1', 'valeur 2' )
 	 *                                    or an already keyed map array( '1' => '...', '2' => '...' ).
+	 *                                    Passed through as-is: the API does not validate them server-side.
 	 * @param string       $sender_name   Optional sender name; defaults to the configured one.
 	 * @return array|WP_Error
 	 */

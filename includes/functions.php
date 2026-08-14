@@ -30,7 +30,7 @@ function nimbasms_send( $to, $message, $sender_name = '' ) {
  *
  * @param string|array $to            One phone number or a list of numbers.
  * @param string       $template_name Approved WhatsApp template name.
- * @param array        $variables     Ordered values for the template body variables {{1}}, {{2}}, ...
+ * @param array        $variables     Ordered values for the template variables (passed as-is, no server-side check).
  * @param string       $sender_name   Optional sender name override.
  * @return array|WP_Error API response or error.
  */
