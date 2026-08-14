@@ -4,7 +4,7 @@ Tags: sms, whatsapp, woocommerce, notifications, guinea
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ Connect WordPress to Nimba SMS, the business communication platform: WooCommerce
 * **WooCommerce**: for each order status (processing, completed, cancelled), enable SMS, WhatsApp, or both, with customizable message templates. If WhatsApp is the only enabled channel and sending fails, the SMS message is sent automatically as a fallback. The store administrator can also receive an SMS for every new order.
 * **WhatsApp**: send messages through your Meta-approved WhatsApp Business templates (created from your Nimba SMS dashboard), with dynamic variables.
 * **WordPress notifications**: SMS to the administrator on new user registration or new comment.
+* **Contact Form 7 and WPForms**: SMS to the administrator on each form submission, and an optional confirmation SMS to the visitor when the form contains a phone field (auto-detected, or set the field name in the settings). Customizable messages.
 * **Manual sending**: send an SMS or a WhatsApp template message to one or several numbers directly from the admin.
 * **Send log**: history of sent messages with their delivery status, updated in real time through the Nimba SMS delivery webhook (URL provided in the settings, to paste into the "URL Webhook" field at https://www.nimbasms.com/app/api-keys).
 * **Live balances**: your SMS and WhatsApp credits displayed in the settings.
@@ -50,6 +51,10 @@ On the API keys page of your account: https://www.nimbasms.com/app/api-keys. Ful
 
 Yes. The WooCommerce features only appear when WooCommerce is active.
 
+= Does the plugin integrate with contact forms? =
+
+Yes, with Contact Form 7 and WPForms (Lite or Pro). Enable the notifications in the Forms section of the settings; it appears when one of these plugins is active. The visitor phone field is auto-detected (WPForms phone field type, or any field whose name contains "phone" or "tel"), and you can set an exact field name in the settings.
+
 = Does the plugin support WhatsApp? =
 
 Yes. Enable the WhatsApp channel in the settings, then provide the name of a Meta-approved template (templates are created from your Nimba SMS dashboard). Email and other channels are coming in future releases.
@@ -71,10 +76,13 @@ See the network coverage on www.nimbasms.com.
 
 == Changelog ==
 
+= 1.1.0 =
+* Contact Form 7 and WPForms integration: administrator SMS on each submission, optional visitor confirmation SMS with automatic phone field detection, customizable messages, and new developer filters (`nimbasms_forms_replacements`, `nimbasms_forms_visitor_phone`).
+
 = 1.0.0 =
 * Initial release: SMS and WhatsApp channels (Meta templates), WooCommerce integration with SMS fallback, WordPress notifications, manual sending, delivery-status webhook, send log, developer functions.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Initial release.
+= 1.1.0 =
+Adds Contact Form 7 and WPForms integration.

@@ -12,6 +12,7 @@ Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 - **WooCommerce** — SMS et/ou WhatsApp au client par statut de commande (les deux canaux sont cumulables ; repli SMS automatique si WhatsApp seul échoue), modèles avec variables `{order_id}`, `{total}`…, et SMS à l'administrateur à chaque nouvelle commande
 - **WhatsApp** — envoi via templates WhatsApp Business approuvés par Meta, variables dynamiques passées dans l'ordre du template (en canal WhatsApp, seul le template est envoyé)
 - **Notifications WordPress** — nouvelle inscription, nouveau commentaire
+- **Contact Form 7 / WPForms** — SMS à l'administrateur à chaque soumission, confirmation SMS au visiteur (champ téléphone auto-détecté ou configurable), messages personnalisables
 - **Envoi manuel** de SMS depuis l'administration
 - **Journal des envois** avec statuts de livraison en temps réel (webhook : URL fournie dans les réglages, à coller dans le champ « URL Webhook » sur [nimbasms.com/app/api-keys](https://www.nimbasms.com/app/api-keys))
 - **Solde du compte** affiché en temps réel
@@ -53,6 +54,8 @@ Hooks disponibles :
 | `nimbasms_user_phone` | filtre | Résolution du numéro d'un utilisateur |
 | `nimbasms_normalize_number` | filtre | Normalisation des numéros |
 | `nimbasms_webhook_received` | action | À chaque notification de statut reçue de Nimba SMS |
+| `nimbasms_forms_replacements` | filtre | Variables des messages de formulaires |
+| `nimbasms_forms_visitor_phone` | filtre | Numéro du visiteur détecté dans une soumission |
 
 ## Développement
 

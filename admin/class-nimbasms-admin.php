@@ -77,6 +77,12 @@ class NimbaSMS_Admin {
 			$settings['notify_new_comment']        = ! empty( $_POST['notify_new_comment'] ) ? 1 : 0;
 			$settings['wc_notify_admin_new_order'] = ! empty( $_POST['wc_notify_admin_new_order'] ) ? 1 : 0;
 
+			$settings['forms_admin_sms']        = ! empty( $_POST['forms_admin_sms'] ) ? 1 : 0;
+			$settings['forms_visitor_sms']      = ! empty( $_POST['forms_visitor_sms'] ) ? 1 : 0;
+			$settings['forms_phone_field']      = isset( $_POST['forms_phone_field'] ) ? sanitize_text_field( wp_unslash( $_POST['forms_phone_field'] ) ) : '';
+			$settings['forms_admin_template']   = isset( $_POST['forms_admin_template'] ) ? sanitize_textarea_field( wp_unslash( $_POST['forms_admin_template'] ) ) : '';
+			$settings['forms_visitor_template'] = isset( $_POST['forms_visitor_template'] ) ? sanitize_textarea_field( wp_unslash( $_POST['forms_visitor_template'] ) ) : '';
+
 			$settings['wa_enabled']          = ! empty( $_POST['wa_enabled'] ) ? 1 : 0;
 			$settings['wa_default_template'] = isset( $_POST['wa_default_template'] ) ? sanitize_text_field( wp_unslash( $_POST['wa_default_template'] ) ) : '';
 
@@ -302,6 +308,41 @@ class NimbaSMS_Admin {
 					</td>
 				</tr>
 			</table>
+
+			<?php if ( NimbaSMS_Forms::has_form_plugin() ) : ?>
+				<h2><?php esc_html_e( 'Formulaires (Contact Form 7 / WPForms)', 'nimbasms' ); ?></h2>
+				<?php $forms_defaults = NimbaSMS_Forms::default_templates(); ?>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Notifications', 'nimbasms' ); ?></th>
+						<td>
+							<label><input type="checkbox" name="forms_admin_sms" value="1" <?php checked( $get( 'forms_admin_sms' ) ); ?>> <?php esc_html_e( 'SMS à l’administrateur à chaque soumission de formulaire', 'nimbasms' ); ?></label><br>
+							<label><input type="checkbox" name="forms_visitor_sms" value="1" <?php checked( $get( 'forms_visitor_sms' ) ); ?>> <?php esc_html_e( 'SMS de confirmation au visiteur (si le formulaire contient un champ téléphone)', 'nimbasms' ); ?></label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="forms_admin_template"><?php esc_html_e( 'Message à l’administrateur', 'nimbasms' ); ?></label></th>
+						<td>
+							<textarea name="forms_admin_template" id="forms_admin_template" class="large-text" rows="2" placeholder="<?php echo esc_attr( $forms_defaults['admin'] ); ?>"><?php echo esc_textarea( $get( 'forms_admin_template' ) ); ?></textarea>
+							<p class="description"><?php esc_html_e( 'Variables : {site} {form}. Laissez vide pour le message par défaut.', 'nimbasms' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="forms_visitor_template"><?php esc_html_e( 'Message au visiteur', 'nimbasms' ); ?></label></th>
+						<td>
+							<textarea name="forms_visitor_template" id="forms_visitor_template" class="large-text" rows="2" placeholder="<?php echo esc_attr( $forms_defaults['visitor'] ); ?>"><?php echo esc_textarea( $get( 'forms_visitor_template' ) ); ?></textarea>
+							<p class="description"><?php esc_html_e( 'Variables : {site} {form}. Laissez vide pour le message par défaut.', 'nimbasms' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="forms_phone_field"><?php esc_html_e( 'Champ téléphone', 'nimbasms' ); ?> <span style="color:#787c82;font-weight:normal;font-size:12px;">(<?php esc_html_e( 'facultatif', 'nimbasms' ); ?>)</span></label></th>
+						<td>
+							<input name="forms_phone_field" id="forms_phone_field" type="text" class="regular-text" value="<?php echo esc_attr( $get( 'forms_phone_field' ) ); ?>" placeholder="your-phone">
+							<p class="description"><?php esc_html_e( 'Nom exact du champ contenant le numéro du visiteur. Sans réglage, le plugin détecte automatiquement les champs de type téléphone (WPForms) ou dont le nom contient « phone » ou « tel ».', 'nimbasms' ); ?></p>
+						</td>
+					</tr>
+				</table>
+			<?php endif; ?>
 
 			<h2><?php esc_html_e( 'WhatsApp', 'nimbasms' ); ?></h2>
 			<table class="form-table" role="presentation">

@@ -3,7 +3,7 @@
  * Plugin Name:       Nimba SMS
  * Plugin URI:        https://github.com/nimbasms/nimbasms-wordpress
  * Description:       Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle des entreprises (SMS, WhatsApp, e-mail) : notifications WooCommerce, envois SMS et WhatsApp (templates Meta), alertes et journal.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Nimba SMS
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'NIMBASMS_VERSION', '1.0.0' );
+define( 'NIMBASMS_VERSION', '1.1.0' );
 define( 'NIMBASMS_PLUGIN_FILE', __FILE__ );
 define( 'NIMBASMS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NIMBASMS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -30,6 +30,7 @@ require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-api.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-logger.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-notifications.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-webhook.php';
+require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-forms.php';
 require_once NIMBASMS_PLUGIN_DIR . 'includes/functions.php';
 
 if ( is_admin() ) {
@@ -89,6 +90,8 @@ final class NimbaSMS_Plugin {
 			require_once NIMBASMS_PLUGIN_DIR . 'includes/class-nimbasms-woocommerce.php';
 			NimbaSMS_WooCommerce::init();
 		}
+
+		NimbaSMS_Forms::init();
 	}
 }
 
