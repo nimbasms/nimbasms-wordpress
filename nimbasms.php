@@ -12,6 +12,8 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       nimbasms
  * Domain Path:       /languages
+ *
+ * @package NimbaSMS
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -81,6 +83,13 @@ final class NimbaSMS_Plugin {
 	}
 
 	/**
+	 * Activation: create the logs table.
+	 */
+	public static function activate() {
+		NimbaSMS_Logger::create_table();
+	}
+
+	/**
 	 * Load WooCommerce integration when WooCommerce is active.
 	 */
 	public function maybe_load_woocommerce() {
@@ -91,12 +100,6 @@ final class NimbaSMS_Plugin {
 	}
 }
 
-/**
- * Activation: create the logs table.
- */
-function nimbasms_activate() {
-	NimbaSMS_Logger::create_table();
-}
-register_activation_hook( __FILE__, 'nimbasms_activate' );
+register_activation_hook( __FILE__, array( 'NimbaSMS_Plugin', 'activate' ) );
 
 NimbaSMS_Plugin::instance();

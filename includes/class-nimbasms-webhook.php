@@ -115,7 +115,13 @@ class NimbaSMS_Webhook {
 		$status    = sanitize_key( (string) $request->get_param( 'status' ) );
 
 		if ( '' === $messageid ) {
-			return new WP_REST_Response( array( 'status' => 'ignored', 'reason' => 'missing messageid' ), 400 );
+			return new WP_REST_Response(
+				array(
+					'status' => 'ignored',
+					'reason' => 'missing messageid',
+				),
+				400
+			);
 		}
 
 		$allowed = array( 'tosend', 'sent', 'received', 'read', 'failure', 'failed', 'not_available' );

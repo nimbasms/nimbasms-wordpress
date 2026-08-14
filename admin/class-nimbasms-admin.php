@@ -127,7 +127,7 @@ class NimbaSMS_Admin {
 		if ( isset( $_POST['nimbasms_manual_send'] ) && check_admin_referer( 'nimbasms_manual_send', 'nimbasms_nonce' ) ) {
 			$to      = isset( $_POST['sms_to'] ) ? sanitize_text_field( wp_unslash( $_POST['sms_to'] ) ) : '';
 			$message = isset( $_POST['sms_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['sms_message'] ) ) : '';
-			$channel = ( isset( $_POST['sms_channel'] ) && 'whatsapp' === $_POST['sms_channel'] ) ? 'whatsapp' : 'sms';
+			$channel = ( isset( $_POST['sms_channel'] ) && 'whatsapp' === sanitize_key( wp_unslash( $_POST['sms_channel'] ) ) ) ? 'whatsapp' : 'sms';
 
 			$numbers = array_map( 'trim', explode( ',', $to ) );
 

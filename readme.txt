@@ -30,7 +30,7 @@ Un compte [Nimba SMS](https://www.nimbasms.com) avec un nom d'expéditeur approu
 
 = Service externe =
 
-Ce plugin communique avec l'API Nimba SMS (https://api.nimbasms.com) pour envoyer les SMS et récupérer le solde et les noms d'expéditeur de votre compte. Les données transmises sont : vos identifiants API, les numéros de téléphone destinataires et le contenu des messages. Voir les [conditions générales d'utilisation de Nimba SMS](https://www.nimbasms.com/conditions-generales-d-utilisation).
+Ce plugin communique avec l'API Nimba SMS (https://api.nimbasms.com) pour envoyer les SMS et récupérer le solde et les noms d'expéditeur de votre compte. Les données transmises sont : vos identifiants API, les numéros de téléphone destinataires et le contenu des messages. En sens inverse, si vous configurez le webhook de livraison, les serveurs de Nimba SMS appellent une URL de votre site (endpoint REST `nimbasms/v1/webhook`, protégé par un jeton secret) pour transmettre les changements de statut de vos messages. Voir les [conditions générales d'utilisation de Nimba SMS](https://www.nimbasms.com/conditions-generales-d-utilisation).
 
 == Installation ==
 

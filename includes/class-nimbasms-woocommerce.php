@@ -163,5 +163,4 @@ class NimbaSMS_WooCommerce {
 			nimbasms_send( $phone, $message );
 		}
 	}
-
 }
