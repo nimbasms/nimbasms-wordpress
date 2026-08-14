@@ -25,7 +25,7 @@ Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle
 
 = Prérequis =
 
-Un compte [Nimba SMS](https://www.nimbasms.com) avec un nom d'expéditeur approuvé. Vos identifiants API (SERVICE ID et SECRET TOKEN) sont disponibles dans la rubrique Développeurs de votre compte. Documentation : [developers.nimbasms.com](https://developers.nimbasms.com).
+Un compte [Nimba SMS](https://www.nimbasms.com) avec un nom d'expéditeur approuvé. Vos identifiants API (SERVICE ID et SECRET TOKEN) sont disponibles sur [la page Clés API de votre compte](https://www.nimbasms.com/app/api-keys). Documentation de l'API : [developers.nimbasms.com](https://developers.nimbasms.com).
 
 = Service externe =
 
@@ -43,7 +43,7 @@ Ce plugin communique avec l'API Nimba SMS (https://api.nimbasms.com) pour envoye
 
 = Où trouver mes identifiants API ? =
 
-Dans votre compte Nimba SMS, rubrique Développeurs. Documentation complète sur developers.nimbasms.com.
+Sur la page Clés API de votre compte : https://www.nimbasms.com/app/api-keys. Documentation complète sur developers.nimbasms.com.
 
 = Le plugin fonctionne-t-il sans WooCommerce ? =
 

@@ -27,7 +27,7 @@ cd wp-content/plugins
 git clone https://github.com/nimbasms/nimbasms-wordpress.git nimbasms
 ```
 
-Puis activez l'extension et renseignez vos identifiants (menu **Nimba SMS**). Identifiants disponibles sur votre compte Nimba SMS, documentation sur [developers.nimbasms.com](https://developers.nimbasms.com).
+Puis activez l'extension et renseignez vos identifiants (menu **Nimba SMS**). Identifiants disponibles sur [la page Clés API de votre compte](https://www.nimbasms.com/app/api-keys), documentation sur [developers.nimbasms.com](https://developers.nimbasms.com).
 
 ## Pour les développeurs
 

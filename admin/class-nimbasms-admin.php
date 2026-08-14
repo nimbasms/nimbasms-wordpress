@@ -183,8 +183,9 @@ class NimbaSMS_Admin {
 			<p>
 				<?php
 				printf(
-					/* translators: %s: developers portal URL. */
-					esc_html__( 'Récupérez vos identifiants sur %s (rubrique Développeurs de votre compte Nimba SMS).', 'nimbasms' ),
+					/* translators: 1: API keys page URL, 2: developers portal URL. */
+					esc_html__( 'Récupérez vos identifiants sur %1$s. Documentation de l’API : %2$s.', 'nimbasms' ),
+					'<a href="https://www.nimbasms.com/app/api-keys" target="_blank" rel="noopener">nimbasms.com/app/api-keys</a>',
 					'<a href="https://developers.nimbasms.com" target="_blank" rel="noopener">developers.nimbasms.com</a>'
 				);
 				?>
