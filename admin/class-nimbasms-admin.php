@@ -233,6 +233,7 @@ class NimbaSMS_Admin {
 		<form method="post">
 			<?php wp_nonce_field( 'nimbasms_settings', 'nimbasms_nonce' ); ?>
 			<h2><?php esc_html_e( 'Identifiants API', 'nimbasms' ); ?></h2>
+			<p class="description"><span style="color:#b32d2e;">*</span> <?php esc_html_e( 'champ obligatoire', 'nimbasms' ); ?></p>
 			<p>
 				<?php
 				printf(
@@ -245,18 +246,18 @@ class NimbaSMS_Admin {
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><label for="service_id"><?php esc_html_e( 'SERVICE ID', 'nimbasms' ); ?></label></th>
-					<td><input name="service_id" id="service_id" type="text" class="regular-text" value="<?php echo esc_attr( $get( 'service_id' ) ); ?>" autocomplete="off"></td>
+					<th scope="row"><label for="service_id"><?php esc_html_e( 'SERVICE ID', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></label></th>
+					<td><input name="service_id" id="service_id" type="text" class="regular-text" value="<?php echo esc_attr( $get( 'service_id' ) ); ?>" autocomplete="off" required></td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="secret_token"><?php esc_html_e( 'SECRET TOKEN', 'nimbasms' ); ?></label></th>
+					<th scope="row"><label for="secret_token"><?php esc_html_e( 'SECRET TOKEN', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></label></th>
 					<td>
 						<input name="secret_token" id="secret_token" type="password" class="regular-text" value="" autocomplete="new-password"
 							placeholder="<?php echo '' !== $get( 'secret_token' ) ? esc_attr__( '•••••••• (enregistré — laissez vide pour conserver)', 'nimbasms' ) : ''; ?>">
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="sender_name"><?php esc_html_e( 'Nom d’expéditeur', 'nimbasms' ); ?></label></th>
+					<th scope="row"><label for="sender_name"><?php esc_html_e( 'Nom d’expéditeur', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></label></th>
 					<td>
 						<?php if ( ! empty( $sendernames ) ) : ?>
 							<select name="sender_name" id="sender_name">
@@ -272,10 +273,10 @@ class NimbaSMS_Admin {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="admin_phone"><?php esc_html_e( 'Numéro de l’administrateur', 'nimbasms' ); ?></label></th>
+					<th scope="row"><label for="admin_phone"><?php esc_html_e( 'Numéro de l’administrateur', 'nimbasms' ); ?> <span style="color:#787c82;font-weight:normal;font-size:12px;">(<?php esc_html_e( 'facultatif', 'nimbasms' ); ?>)</span></label></th>
 					<td>
 						<input name="admin_phone" id="admin_phone" type="text" class="regular-text" value="<?php echo esc_attr( $get( 'admin_phone' ) ); ?>" placeholder="6XXXXXXXX">
-						<p class="description"><?php esc_html_e( 'Reçoit les notifications SMS (nouvelles commandes, inscriptions…).', 'nimbasms' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Reçoit les notifications SMS (nouvelles commandes, inscriptions…). Requis uniquement si vous activez des notifications administrateur.', 'nimbasms' ); ?></p>
 					</td>
 				</tr>
 			</table>
@@ -303,7 +304,7 @@ class NimbaSMS_Admin {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="wa_default_template"><?php esc_html_e( 'Template par défaut', 'nimbasms' ); ?></label></th>
+					<th scope="row"><label for="wa_default_template"><?php esc_html_e( 'Template par défaut', 'nimbasms' ); ?> <span style="color:#787c82;font-weight:normal;font-size:12px;">(<?php esc_html_e( 'facultatif', 'nimbasms' ); ?>)</span></label></th>
 					<td>
 						<input name="wa_default_template" id="wa_default_template" type="text" class="regular-text" value="<?php echo esc_attr( $get( 'wa_default_template' ) ); ?>" placeholder="ma_notification">
 						<p class="description"><?php esc_html_e( 'Nom exact du template validé (sensible à la casse).', 'nimbasms' ); ?></p>
@@ -358,7 +359,7 @@ class NimbaSMS_Admin {
 									<input type="text" name="wa_wc_templates[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_tpl ); ?>" placeholder="<?php esc_attr_e( 'Template WhatsApp (si canal WhatsApp)', 'nimbasms' ); ?>">
 									<input type="text" name="wa_wc_variables[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_vars ); ?>" placeholder="{order_id}|{total}">
 								</p>
-								<p class="description"><?php esc_html_e( 'Variables du template WhatsApp, séparées par | et dans l’ordre de {{1}}, {{2}}, …', 'nimbasms' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Template WhatsApp : obligatoire si le canal WhatsApp est choisi pour ce statut (sinon repli SMS). Variables : facultatives, séparées par | et dans l’ordre de {{1}}, {{2}}, …', 'nimbasms' ); ?></p>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -390,22 +391,23 @@ class NimbaSMS_Admin {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="sms_to"><?php esc_html_e( 'Destinataire(s)', 'nimbasms' ); ?></label></th>
+					<th scope="row"><label for="sms_to"><?php esc_html_e( 'Destinataire(s)', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></label></th>
 					<td>
 						<input name="sms_to" id="sms_to" type="text" class="large-text" placeholder="624000000, 625000000" required>
 						<p class="description"><?php esc_html_e( 'Un ou plusieurs numéros séparés par des virgules.', 'nimbasms' ); ?></p>
 					</td>
 				</tr>
 				<tr id="nimbasms-sms-fields">
-					<th scope="row"><label for="sms_message"><?php esc_html_e( 'Message', 'nimbasms' ); ?></label></th>
+					<th scope="row"><label for="sms_message"><?php esc_html_e( 'Message', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></label></th>
 					<td><textarea name="sms_message" id="sms_message" class="large-text" rows="5" maxlength="1071"></textarea>
 					<p class="description"><?php esc_html_e( 'Jusqu’à 1071 caractères (7 SMS).', 'nimbasms' ); ?></p></td>
 				</tr>
 				<tr id="nimbasms-wa-fields" style="display:none;">
-					<th scope="row"><?php esc_html_e( 'Template WhatsApp', 'nimbasms' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Template WhatsApp', 'nimbasms' ); ?><span style="color:#b32d2e;" aria-hidden="true"> *</span></th>
 					<td>
 						<input type="text" name="wa_template" class="regular-text" placeholder="<?php esc_attr_e( 'Nom du template validé', 'nimbasms' ); ?>">
 						<input type="text" name="wa_variables" class="regular-text" placeholder="<?php esc_attr_e( 'Variables séparées par | (ordre de {{1}}, {{2}}…)', 'nimbasms' ); ?>">
+						<p class="description"><?php esc_html_e( 'Nom du template : obligatoire. Variables : facultatives selon le template.', 'nimbasms' ); ?></p>
 					</td>
 				</tr>
 			</table>
