@@ -91,7 +91,7 @@ class NimbaSMS_Logger {
 	public static function update_status( $message_id, $status ) {
 		global $wpdb;
 
-		return $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		return $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			self::table(),
 			array( 'status' => sanitize_key( $status ) ),
 			array( 'message_id' => sanitize_text_field( $message_id ) ),
@@ -109,9 +109,9 @@ class NimbaSMS_Logger {
 	public static function recent( $limit = 50 ) {
 		global $wpdb;
 
-		$table = self::table();
+		$table = esc_sql( self::table() );
 
-		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare(
 				"SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				absint( $limit )

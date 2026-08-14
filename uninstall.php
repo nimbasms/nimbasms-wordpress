@@ -14,5 +14,5 @@ global $wpdb;
 delete_option( 'nimbasms_settings' );
 delete_option( 'nimbasms_webhook_secret' );
 
-$table = $wpdb->prefix . 'nimbasms_logs';
-$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore
+$nimbasms_table = $wpdb->prefix . 'nimbasms_logs';
+$wpdb->query( "DROP TABLE IF EXISTS {$nimbasms_table}" ); // phpcs:ignore

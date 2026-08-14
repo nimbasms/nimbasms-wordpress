@@ -8,73 +8,73 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle des entreprises : notifications WooCommerce, alertes et SMS.
+Connect WordPress to Nimba SMS, the business communication platform: WooCommerce notifications, alerts, SMS and WhatsApp messages.
 
 == Description ==
 
-**Nimba SMS** connecte votre site WordPress à [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises, qui prend en charge le SMS, WhatsApp et l'e-mail (et d'autres canaux à venir). Cette extension couvre les canaux SMS et WhatsApp : envoyez des SMS avec le nom de votre entreprise comme expéditeur, et des messages WhatsApp via vos templates approuvés par Meta, directement depuis WordPress. Les autres canaux seront ajoutés dans les prochaines versions.
+**Nimba SMS** connects your WordPress site to [Nimba SMS](https://www.nimbasms.com), the professional communication platform for businesses, supporting SMS, WhatsApp and email (with more channels coming). This plugin covers the SMS and WhatsApp channels: send SMS with your company name as the sender, and WhatsApp messages through your Meta-approved templates, straight from WordPress. More channels will be added in future releases.
 
-= Fonctionnalités =
+= Features =
 
-* **WooCommerce** : pour chaque statut de commande (confirmée, terminée, annulée), activez le SMS, WhatsApp, ou les deux, avec modèles personnalisables. Si seul WhatsApp est activé et que l'envoi échoue, repli automatique en SMS. SMS à l'administrateur à chaque nouvelle commande.
-* **WhatsApp** : envoi via vos templates WhatsApp Business approuvés par Meta (créés depuis votre dashboard Nimba SMS), avec variables dynamiques.
-* **Notifications WordPress** : SMS à l'administrateur lors d'une nouvelle inscription ou d'un nouveau commentaire.
-* **Envoi manuel** : envoyez un SMS à un ou plusieurs numéros directement depuis l'administration.
-* **Journal des envois** : historique des messages envoyés avec leur statut, mis à jour en temps réel via le webhook de livraison Nimba SMS (URL fournie dans les réglages, à copier dans le champ « URL Webhook » de la page https://www.nimbasms.com/app/api-keys).
-* **Solde en temps réel** : votre crédit SMS affiché dans les réglages.
-* **Pour les développeurs** : fonctions `nimbasms_send( $to, $message )` et `nimbasms_send_whatsapp( $to, $template, $variables )` et hooks (`nimbasms_send_payload`, `nimbasms_after_send`, `nimbasms_wc_templates`…) pour intégrer le SMS dans vos propres extensions.
+* **WooCommerce**: for each order status (processing, completed, cancelled), enable SMS, WhatsApp, or both, with customizable message templates. If WhatsApp is the only enabled channel and sending fails, the SMS message is sent automatically as a fallback. The store administrator can also receive an SMS for every new order.
+* **WhatsApp**: send messages through your Meta-approved WhatsApp Business templates (created from your Nimba SMS dashboard), with dynamic variables.
+* **WordPress notifications**: SMS to the administrator on new user registration or new comment.
+* **Manual sending**: send an SMS or a WhatsApp template message to one or several numbers directly from the admin.
+* **Send log**: history of sent messages with their delivery status, updated in real time through the Nimba SMS delivery webhook (URL provided in the settings, to paste into the "URL Webhook" field at https://www.nimbasms.com/app/api-keys).
+* **Live balances**: your SMS and WhatsApp credits displayed in the settings.
+* **For developers**: `nimbasms_send( $to, $message )` and `nimbasms_send_whatsapp( $to, $template, $variables )` functions plus hooks (`nimbasms_send_payload`, `nimbasms_after_send`, `nimbasms_wc_templates`, `nimbasms_webhook_received`...) to integrate messaging into your own extensions.
 
-= Prérequis =
+= Requirements =
 
-Un compte [Nimba SMS](https://www.nimbasms.com) avec un nom d'expéditeur approuvé. Vos identifiants API (SERVICE ID et SECRET TOKEN) sont disponibles sur [la page Clés API de votre compte](https://www.nimbasms.com/app/api-keys). Documentation de l'API : [developers.nimbasms.com](https://developers.nimbasms.com).
+A [Nimba SMS](https://www.nimbasms.com) account with an approved sender name. Your API credentials (SERVICE ID and SECRET TOKEN) are available on [the API keys page of your account](https://www.nimbasms.com/app/api-keys). API documentation: [developers.nimbasms.com](https://developers.nimbasms.com).
 
-= Service externe =
+= External service =
 
-Ce plugin communique avec l'API Nimba SMS (https://api.nimbasms.com) pour envoyer les SMS et récupérer le solde et les noms d'expéditeur de votre compte. Les données transmises sont : vos identifiants API, les numéros de téléphone destinataires et le contenu des messages. En sens inverse, si vous configurez le webhook de livraison, les serveurs de Nimba SMS appellent une URL de votre site (endpoint REST `nimbasms/v1/webhook`, protégé par un jeton secret) pour transmettre les changements de statut de vos messages. Voir les [conditions générales d'utilisation de Nimba SMS](https://www.nimbasms.com/conditions-generales-d-utilisation).
+This plugin communicates with the Nimba SMS API (https://api.nimbasms.com) to send messages and retrieve your account balance and sender names. Data transmitted: your API credentials, recipient phone numbers and message content. Conversely, if you configure the delivery webhook, Nimba SMS servers call a URL on your site (REST endpoint `nimbasms/v1/webhook`, protected by a secret token) to push message status changes. See the [Nimba SMS terms of use](https://www.nimbasms.com/conditions-generales-d-utilisation).
 
 == Installation ==
 
-1. Installez le plugin depuis le répertoire des extensions WordPress, ou téléversez le dossier `nimbasms` dans `/wp-content/plugins/`.
-2. Activez l'extension.
-3. Rendez-vous dans **Nimba SMS** dans le menu d'administration.
-4. Renseignez votre SERVICE ID et votre SECRET TOKEN, choisissez votre nom d'expéditeur, enregistrez.
-5. Activez les notifications souhaitées.
+1. Install the plugin from the WordPress plugin directory, or upload the `nimbasms` folder to `/wp-content/plugins/`.
+2. Activate the plugin.
+3. Go to **Nimba SMS** in the admin menu.
+4. Enter your SERVICE ID and SECRET TOKEN, pick your sender name, and save.
+5. Enable the notifications you need.
 
 == Frequently Asked Questions ==
 
-= Où trouver mes identifiants API ? =
+= Where do I find my API credentials? =
 
-Sur la page Clés API de votre compte : https://www.nimbasms.com/app/api-keys. Documentation complète sur developers.nimbasms.com.
+On the API keys page of your account: https://www.nimbasms.com/app/api-keys. Full documentation at developers.nimbasms.com.
 
-= Le plugin fonctionne-t-il sans WooCommerce ? =
+= Does the plugin work without WooCommerce? =
 
-Oui. Les fonctions WooCommerce ne s'affichent que si WooCommerce est actif.
+Yes. The WooCommerce features only appear when WooCommerce is active.
 
-= Puis-je envoyer des SMS depuis mon propre code ? =
+= Does the plugin support WhatsApp? =
 
-Oui : `nimbasms_send( '624000000', 'Mon message' );` — des filtres et actions sont disponibles pour personnaliser les envois.
+Yes. Enable the WhatsApp channel in the settings, then provide the name of a Meta-approved template (templates are created from your Nimba SMS dashboard). Email and other channels are coming in future releases.
 
-= L'extension gère-t-elle WhatsApp ? =
+= Can I send messages from my own code? =
 
-Oui. Activez le canal WhatsApp dans les réglages, puis renseignez le nom d'un template approuvé par Meta (les templates se créent depuis votre dashboard Nimba SMS). L'e-mail et d'autres canaux arriveront dans les prochaines versions.
+Yes: `nimbasms_send( '624000000', 'My message' );` — filters and actions are available to customize sending.
 
-= Quels pays sont couverts ? =
+= Which countries are covered? =
 
-Consultez la couverture réseau sur www.nimbasms.com.
+See the network coverage on www.nimbasms.com.
 
 == Screenshots ==
 
-1. Réglages : identifiants API, solde et nom d'expéditeur.
-2. Notifications WooCommerce avec modèles personnalisables.
-3. Envoi manuel de SMS depuis l'administration.
-4. Journal des envois.
+1. Settings: API credentials, balances and sender name.
+2. WooCommerce notifications with per-status SMS and WhatsApp columns.
+3. Manual sending from the admin.
+4. Send log with delivery statuses.
 
 == Changelog ==
 
 = 1.0.0 =
-* Version initiale : canaux SMS et WhatsApp (templates Meta), intégration WooCommerce avec repli SMS, notifications WordPress, envoi manuel, journal des envois, fonctions développeur.
+* Initial release: SMS and WhatsApp channels (Meta templates), WooCommerce integration with SMS fallback, WordPress notifications, manual sending, delivery-status webhook, send log, developer functions.
 
 == Upgrade Notice ==
 
 = 1.0.0 =
-Version initiale.
+Initial release.

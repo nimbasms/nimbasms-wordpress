@@ -64,7 +64,6 @@ final class NimbaSMS_Plugin {
 	 * Constructor.
 	 */
 	private function __construct() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'maybe_load_woocommerce' ), 20 );
 
 		NimbaSMS_Notifications::init();
@@ -73,13 +72,6 @@ final class NimbaSMS_Plugin {
 		if ( is_admin() ) {
 			NimbaSMS_Admin::init();
 		}
-	}
-
-	/**
-	 * Load translations.
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'nimbasms', false, dirname( plugin_basename( NIMBASMS_PLUGIN_FILE ) ) . '/languages' );
 	}
 
 	/**
