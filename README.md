@@ -13,7 +13,7 @@ Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 - **WhatsApp** — envoi via templates WhatsApp Business approuvés par Meta, variables dynamiques passées dans l'ordre du template (en canal WhatsApp, seul le template est envoyé)
 - **Notifications WordPress** — nouvelle inscription, nouveau commentaire
 - **Envoi manuel** de SMS depuis l'administration
-- **Journal des envois** avec statuts de livraison en temps réel (webhook : URL fournie dans les réglages, à coller dans le dashboard Nimba SMS)
+- **Journal des envois** avec statuts de livraison en temps réel (webhook : URL fournie dans les réglages, à coller dans le champ « URL Webhook » sur [nimbasms.com/app/api-keys](https://www.nimbasms.com/app/api-keys))
 - **Solde du compte** affiché en temps réel
 - **API développeur** — `nimbasms_send( $to, $message )` + hooks
 

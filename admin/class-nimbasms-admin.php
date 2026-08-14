@@ -381,7 +381,13 @@ class NimbaSMS_Admin {
 
 		<h2><?php esc_html_e( 'Webhook de statut de livraison', 'nimbasms' ); ?></h2>
 		<p class="description" style="max-width:760px;">
-			<?php esc_html_e( 'Pour que le journal se mette à jour automatiquement (envoyé, reçu, échec…), copiez cette URL dans votre dashboard Nimba SMS, section API KEYS → Webhooks. Nimba SMS l’appellera à chaque changement de statut d’un message.', 'nimbasms' ); ?>
+			<?php
+			printf(
+				/* translators: %s: link to the Nimba SMS API keys page. */
+				esc_html__( 'Pour que le journal se mette à jour automatiquement (envoyé, reçu, échec…), copiez cette URL dans le champ « URL Webhook » de la page %s de votre compte Nimba SMS. Nimba SMS l’appellera à chaque changement de statut d’un message.', 'nimbasms' ),
+				'<a href="https://www.nimbasms.com/app/api-keys" target="_blank" rel="noopener">nimbasms.com/app/api-keys</a>'
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" readonly class="large-text code" style="max-width:760px;" value="<?php echo esc_attr( NimbaSMS_Webhook::url() ); ?>" onclick="this.select();">

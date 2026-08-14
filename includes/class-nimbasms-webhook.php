@@ -41,7 +41,7 @@ class NimbaSMS_Webhook {
 	}
 
 	/**
-	 * Full webhook URL to paste in the Nimba SMS dashboard (API KEYS > Webhooks).
+	 * Full webhook URL to paste in the "URL Webhook" field at https://www.nimbasms.com/app/api-keys.
 	 *
 	 * @return string
 	 */

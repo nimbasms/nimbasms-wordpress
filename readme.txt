@@ -20,7 +20,7 @@ Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle
 * **WhatsApp** : envoi via vos templates WhatsApp Business approuvés par Meta (créés depuis votre dashboard Nimba SMS), avec variables dynamiques.
 * **Notifications WordPress** : SMS à l'administrateur lors d'une nouvelle inscription ou d'un nouveau commentaire.
 * **Envoi manuel** : envoyez un SMS à un ou plusieurs numéros directement depuis l'administration.
-* **Journal des envois** : historique des messages envoyés avec leur statut, mis à jour en temps réel via le webhook de livraison Nimba SMS (URL à copier dans votre dashboard, section API KEYS → Webhooks).
+* **Journal des envois** : historique des messages envoyés avec leur statut, mis à jour en temps réel via le webhook de livraison Nimba SMS (URL fournie dans les réglages, à copier dans le champ « URL Webhook » de la page https://www.nimbasms.com/app/api-keys).
 * **Solde en temps réel** : votre crédit SMS affiché dans les réglages.
 * **Pour les développeurs** : fonctions `nimbasms_send( $to, $message )` et `nimbasms_send_whatsapp( $to, $template, $variables )` et hooks (`nimbasms_send_payload`, `nimbasms_after_send`, `nimbasms_wc_templates`…) pour intégrer le SMS dans vos propres extensions.
 
