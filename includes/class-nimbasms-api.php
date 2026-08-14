@@ -118,6 +118,11 @@ class NimbaSMS_API {
 	}
 
 	/**
+	 * Max recipients per API request (API constraint).
+	 */
+	const MAX_RECIPIENTS = 30;
+
+	/**
 	 * Send an SMS.
 	 *
 	 * @param string|array $to          One number or a list of numbers.
@@ -126,6 +131,54 @@ class NimbaSMS_API {
 	 * @return array|WP_Error
 	 */
 	public static function send( $to, $message, $sender_name = '' ) {
+		return self::dispatch(
+			$to,
+			array(
+				'channel' => 'sms',
+				'message' => $message,
+			),
+			$sender_name
+		);
+	}
+
+	/**
+	 * Send a WhatsApp message using an approved template.
+	 *
+	 * @param string|array $to            One number or a list of numbers.
+	 * @param string       $template_name Approved WhatsApp template name.
+	 * @param array        $variables     Ordered body variable values, e.g. array( 'valeur 1', 'valeur 2' )
+	 *                                    or an already keyed map array( '1' => '...', '2' => '...' ).
+	 * @param string       $sender_name   Optional sender name; defaults to the configured one.
+	 * @return array|WP_Error
+	 */
+	public static function send_whatsapp( $to, $template_name, $variables = array(), $sender_name = '' ) {
+		$body = array();
+		$i    = 1;
+		foreach ( (array) $variables as $key => $value ) {
+			$body[ (string) ( is_int( $key ) ? $i : $key ) ] = (string) $value;
+			$i++;
+		}
+
+		return self::dispatch(
+			$to,
+			array(
+				'channel'            => 'whatsapp',
+				'template_name'      => $template_name,
+				'template_variables' => array( 'body' => (object) $body ),
+			),
+			$sender_name
+		);
+	}
+
+	/**
+	 * Build the payload, chunk recipients (30 max per request) and send.
+	 *
+	 * @param string|array $to          Recipients.
+	 * @param array        $channel_args Channel-specific payload parts.
+	 * @param string       $sender_name Sender name override.
+	 * @return array|WP_Error Last API response (or first error encountered).
+	 */
+	private static function dispatch( $to, $channel_args, $sender_name = '' ) {
 		$settings = get_option( 'nimbasms_settings', array() );
 
 		if ( '' === $sender_name ) {
@@ -138,31 +191,44 @@ class NimbaSMS_API {
 			return new WP_Error( 'nimbasms_invalid_number', __( 'Aucun numéro de téléphone valide.', 'nimbasms' ) );
 		}
 
-		$payload = array(
-			'to'          => $numbers,
-			'message'     => $message,
-			'sender_name' => $sender_name,
-		);
+		$channel = isset( $channel_args['channel'] ) ? $channel_args['channel'] : 'sms';
+		$result  = null;
 
-		/**
-		 * Filter the payload sent to the Nimba SMS API.
-		 *
-		 * @param array $payload Request payload.
-		 */
-		$payload = apply_filters( 'nimbasms_send_payload', $payload );
+		foreach ( array_chunk( $numbers, self::MAX_RECIPIENTS ) as $chunk ) {
+			$payload = array_merge(
+				array(
+					'to'          => $chunk,
+					'sender_name' => $sender_name,
+				),
+				$channel_args
+			);
 
-		$result = self::request( 'POST', '/messages', $payload );
+			/**
+			 * Filter the payload sent to the Nimba SMS API.
+			 *
+			 * @param array $payload Request payload.
+			 */
+			$payload = apply_filters( 'nimbasms_send_payload', $payload );
 
-		NimbaSMS_Logger::log( $numbers, $message, $result );
+			$result = self::request( 'POST', '/messages', $payload );
 
-		/**
-		 * Fires after an SMS send attempt.
-		 *
-		 * @param array          $numbers Recipients.
-		 * @param string         $message Message body.
-		 * @param array|WP_Error $result  API response or error.
-		 */
-		do_action( 'nimbasms_after_send', $numbers, $message, $result );
+			$log_message = isset( $channel_args['message'] ) ? $channel_args['message'] : sprintf( 'template: %s', isset( $channel_args['template_name'] ) ? $channel_args['template_name'] : '' );
+			NimbaSMS_Logger::log( $chunk, $log_message, $result, $channel );
+
+			/**
+			 * Fires after a send attempt on any channel.
+			 *
+			 * @param array          $chunk   Recipients.
+			 * @param string         $message Message body or template reference.
+			 * @param array|WP_Error $result  API response or error.
+			 * @param string         $channel Channel used (sms, whatsapp).
+			 */
+			do_action( 'nimbasms_after_send', $chunk, $log_message, $result, $channel );
+
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
 
 		return $result;
 	}

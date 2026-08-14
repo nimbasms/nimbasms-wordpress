@@ -132,6 +132,32 @@ class NimbaSMS_WooCommerce {
 			return;
 		}
 
-		nimbasms_send( $phone, self::render( $templates[ $new_status ], $order ) );
+		$message = self::render( $templates[ $new_status ], $order );
+
+		// Channel per status: sms (default) or whatsapp (with SMS fallback on error).
+		$settings   = get_option( 'nimbasms_settings', array() );
+		$channel    = isset( $settings['wc_channels'][ $new_status ] ) ? $settings['wc_channels'][ $new_status ] : 'sms';
+		$wa_enabled = ! empty( $settings['wa_enabled'] );
+
+		if ( 'whatsapp' === $channel && $wa_enabled ) {
+			$template_name = isset( $settings['wa_wc_templates'][ $new_status ] ) ? trim( (string) $settings['wa_wc_templates'][ $new_status ] ) : '';
+			$vars_spec     = isset( $settings['wa_wc_variables'][ $new_status ] ) ? (string) $settings['wa_wc_variables'][ $new_status ] : '';
+
+			if ( '' !== $template_name ) {
+				$variables = array();
+				foreach ( array_filter( array_map( 'trim', explode( '|', $vars_spec ) ) ) as $token ) {
+					$variables[] = self::render( $token, $order );
+				}
+
+				$result = nimbasms_send_whatsapp( $phone, $template_name, $variables );
+
+				if ( ! is_wp_error( $result ) ) {
+					return;
+				}
+				// WhatsApp failed: fall through to SMS fallback below.
+			}
+		}
+
+		nimbasms_send( $phone, $message );
 	}
 }

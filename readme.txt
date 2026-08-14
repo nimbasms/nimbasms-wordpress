@@ -1,6 +1,6 @@
 === Nimba SMS ===
 Contributors: nimbasms
-Tags: sms, woocommerce, notifications, guinea
+Tags: sms, whatsapp, woocommerce, notifications, guinea
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -12,16 +12,17 @@ Connectez WordPress à Nimba SMS, la plateforme de communication professionnelle
 
 == Description ==
 
-**Nimba SMS** connecte votre site WordPress à [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises, qui prend en charge le SMS, WhatsApp et l'e-mail (et d'autres canaux à venir). Cette extension couvre le canal SMS : envoyez des SMS avec le nom de votre entreprise comme expéditeur, directement depuis WordPress. Les autres canaux seront ajoutés dans les prochaines versions.
+**Nimba SMS** connecte votre site WordPress à [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises, qui prend en charge le SMS, WhatsApp et l'e-mail (et d'autres canaux à venir). Cette extension couvre les canaux SMS et WhatsApp : envoyez des SMS avec le nom de votre entreprise comme expéditeur, et des messages WhatsApp via vos templates approuvés par Meta, directement depuis WordPress. Les autres canaux seront ajoutés dans les prochaines versions.
 
 = Fonctionnalités =
 
-* **WooCommerce** : SMS automatique au client aux changements de statut de commande (confirmée, terminée, annulée) avec modèles personnalisables, et SMS à l'administrateur à chaque nouvelle commande.
+* **WooCommerce** : SMS ou message WhatsApp automatique au client aux changements de statut de commande (confirmée, terminée, annulée) avec modèles personnalisables, et SMS à l'administrateur à chaque nouvelle commande. En canal WhatsApp, repli automatique en SMS si l'envoi échoue.
+* **WhatsApp** : envoi via vos templates WhatsApp Business approuvés par Meta (créés depuis votre dashboard Nimba SMS), avec variables dynamiques.
 * **Notifications WordPress** : SMS à l'administrateur lors d'une nouvelle inscription ou d'un nouveau commentaire.
 * **Envoi manuel** : envoyez un SMS à un ou plusieurs numéros directement depuis l'administration.
 * **Journal des envois** : historique des SMS envoyés avec leur statut.
 * **Solde en temps réel** : votre crédit SMS affiché dans les réglages.
-* **Pour les développeurs** : fonction `nimbasms_send( $to, $message )` et hooks (`nimbasms_send_payload`, `nimbasms_after_send`, `nimbasms_wc_templates`…) pour intégrer le SMS dans vos propres extensions.
+* **Pour les développeurs** : fonctions `nimbasms_send( $to, $message )` et `nimbasms_send_whatsapp( $to, $template, $variables )` et hooks (`nimbasms_send_payload`, `nimbasms_after_send`, `nimbasms_wc_templates`…) pour intégrer le SMS dans vos propres extensions.
 
 = Prérequis =
 
@@ -53,9 +54,9 @@ Oui. Les fonctions WooCommerce ne s'affichent que si WooCommerce est actif.
 
 Oui : `nimbasms_send( '624000000', 'Mon message' );` — des filtres et actions sont disponibles pour personnaliser les envois.
 
-= L'extension gère-t-elle WhatsApp et l'e-mail ? =
+= L'extension gère-t-elle WhatsApp ? =
 
-La plateforme Nimba SMS les prend en charge ; cette extension couvre le SMS aujourd'hui, les autres canaux arriveront dans les prochaines versions.
+Oui. Activez le canal WhatsApp dans les réglages, puis renseignez le nom d'un template approuvé par Meta (les templates se créent depuis votre dashboard Nimba SMS). L'e-mail et d'autres canaux arriveront dans les prochaines versions.
 
 = Quels pays sont couverts ? =
 
@@ -71,7 +72,7 @@ Consultez la couverture réseau sur www.nimbasms.com.
 == Changelog ==
 
 = 1.0.0 =
-* Version initiale : intégration WooCommerce, notifications WordPress, envoi manuel, journal des envois, fonctions développeur.
+* Version initiale : canaux SMS et WhatsApp (templates Meta), intégration WooCommerce avec repli SMS, notifications WordPress, envoi manuel, journal des envois, fonctions développeur.
 
 == Upgrade Notice ==
 

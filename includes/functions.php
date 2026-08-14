@@ -24,6 +24,21 @@ function nimbasms_send( $to, $message, $sender_name = '' ) {
 }
 
 /**
+ * Send a WhatsApp template message through Nimba SMS.
+ *
+ * Usage: nimbasms_send_whatsapp( '624000000', 'order_confirmed', array( 'Fode', '45000 GNF' ) );
+ *
+ * @param string|array $to            One phone number or a list of numbers.
+ * @param string       $template_name Approved WhatsApp template name.
+ * @param array        $variables     Ordered values for the template body variables {{1}}, {{2}}, ...
+ * @param string       $sender_name   Optional sender name override.
+ * @return array|WP_Error API response or error.
+ */
+function nimbasms_send_whatsapp( $to, $template_name, $variables = array(), $sender_name = '' ) {
+	return NimbaSMS_API::send_whatsapp( $to, $template_name, $variables, $sender_name );
+}
+
+/**
  * Normalize a phone number: keep digits and a leading '+'.
  *
  * @param string $number Raw input.

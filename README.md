@@ -1,6 +1,6 @@
 # Nimba SMS for WordPress
 
-Extension WordPress officielle de [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises (SMS, WhatsApp, e-mail — et d'autres canaux à venir). Cette extension couvre le canal SMS : envoyez des SMS avec le nom de votre entreprise comme expéditeur, directement depuis WordPress.
+Extension WordPress officielle de [Nimba SMS](https://www.nimbasms.com), la plateforme de communication professionnelle des entreprises (SMS, WhatsApp, e-mail — et d'autres canaux à venir). Cette extension couvre les canaux **SMS** et **WhatsApp** (templates approuvés par Meta) : envoyez des messages avec le nom de votre entreprise comme expéditeur, directement depuis WordPress.
 
 Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 
@@ -9,7 +9,8 @@ Support : [support@nimbasms.com](mailto:support@nimbasms.com)
 
 ## Fonctionnalités
 
-- **WooCommerce** — SMS au client aux changements de statut de commande (modèles personnalisables avec variables `{order_id}`, `{total}`…) et SMS à l'administrateur à chaque nouvelle commande
+- **WooCommerce** — SMS ou WhatsApp au client aux changements de statut de commande (modèles avec variables `{order_id}`, `{total}`…, repli SMS automatique si WhatsApp échoue) et SMS à l'administrateur à chaque nouvelle commande
+- **WhatsApp** — envoi via templates WhatsApp Business approuvés par Meta, variables dynamiques `{{1}}`, `{{2}}`…
 - **Notifications WordPress** — nouvelle inscription, nouveau commentaire
 - **Envoi manuel** de SMS depuis l'administration
 - **Journal des envois** avec statuts
@@ -32,11 +33,14 @@ Puis activez l'extension et renseignez vos identifiants (menu **Nimba SMS**). Id
 ## Pour les développeurs
 
 ```php
-// Envoi simple
+// SMS simple
 nimbasms_send( '624000000', 'Bonjour depuis WordPress !' );
 
-// Envoi multiple avec nom d'expéditeur spécifique
+// SMS multiple avec nom d'expéditeur spécifique
 nimbasms_send( array( '624000000', '625000000' ), 'Message', 'MASOCIETE' );
+
+// WhatsApp via template approuvé ({{1}} => 'Fodé', {{2}} => '45 000 GNF')
+nimbasms_send_whatsapp( '624000000', 'commande_confirmee', array( 'Fodé', '45 000 GNF' ) );
 ```
 
 Hooks disponibles :

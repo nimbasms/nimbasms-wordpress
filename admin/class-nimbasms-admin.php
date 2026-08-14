@@ -78,6 +78,28 @@ class NimbaSMS_Admin {
 			$settings['wc_notify_admin_new_order'] = ! empty( $_POST['wc_notify_admin_new_order'] ) ? 1 : 0;
 			$settings['wc_notify_customer_status'] = ! empty( $_POST['wc_notify_customer_status'] ) ? 1 : 0;
 
+			$settings['wa_enabled']          = ! empty( $_POST['wa_enabled'] ) ? 1 : 0;
+			$settings['wa_default_template'] = isset( $_POST['wa_default_template'] ) ? sanitize_text_field( wp_unslash( $_POST['wa_default_template'] ) ) : '';
+
+			$settings['wc_channels']     = array();
+			$settings['wa_wc_templates'] = array();
+			$settings['wa_wc_variables'] = array();
+			if ( isset( $_POST['wc_channels'] ) && is_array( $_POST['wc_channels'] ) ) {
+				foreach ( wp_unslash( $_POST['wc_channels'] ) as $status => $channel ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$settings['wc_channels'][ sanitize_key( $status ) ] = in_array( $channel, array( 'sms', 'whatsapp' ), true ) ? $channel : 'sms';
+				}
+			}
+			if ( isset( $_POST['wa_wc_templates'] ) && is_array( $_POST['wa_wc_templates'] ) ) {
+				foreach ( wp_unslash( $_POST['wa_wc_templates'] ) as $status => $tpl ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$settings['wa_wc_templates'][ sanitize_key( $status ) ] = sanitize_text_field( $tpl );
+				}
+			}
+			if ( isset( $_POST['wa_wc_variables'] ) && is_array( $_POST['wa_wc_variables'] ) ) {
+				foreach ( wp_unslash( $_POST['wa_wc_variables'] ) as $status => $vars ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$settings['wa_wc_variables'][ sanitize_key( $status ) ] = sanitize_text_field( $vars );
+				}
+			}
+
 			$settings['wc_templates'] = array();
 			if ( isset( $_POST['wc_templates'] ) && is_array( $_POST['wc_templates'] ) ) {
 				foreach ( wp_unslash( $_POST['wc_templates'] ) as $status => $tpl ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -94,9 +116,18 @@ class NimbaSMS_Admin {
 		if ( isset( $_POST['nimbasms_manual_send'] ) && check_admin_referer( 'nimbasms_manual_send', 'nimbasms_nonce' ) ) {
 			$to      = isset( $_POST['sms_to'] ) ? sanitize_text_field( wp_unslash( $_POST['sms_to'] ) ) : '';
 			$message = isset( $_POST['sms_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['sms_message'] ) ) : '';
+			$channel = ( isset( $_POST['sms_channel'] ) && 'whatsapp' === $_POST['sms_channel'] ) ? 'whatsapp' : 'sms';
 
 			$numbers = array_map( 'trim', explode( ',', $to ) );
-			$result  = nimbasms_send( $numbers, $message );
+
+			if ( 'whatsapp' === $channel ) {
+				$template_name = isset( $_POST['wa_template'] ) ? sanitize_text_field( wp_unslash( $_POST['wa_template'] ) ) : '';
+				$vars_raw      = isset( $_POST['wa_variables'] ) ? sanitize_text_field( wp_unslash( $_POST['wa_variables'] ) ) : '';
+				$variables     = array_filter( array_map( 'trim', explode( '|', $vars_raw ) ), 'strlen' );
+				$result        = nimbasms_send_whatsapp( $numbers, $template_name, $variables );
+			} else {
+				$result = nimbasms_send( $numbers, $message );
+			}
 
 			if ( is_wp_error( $result ) ) {
 				add_settings_error( 'nimbasms', 'send_error', $result->get_error_message(), 'error' );
@@ -157,23 +188,45 @@ class NimbaSMS_Admin {
 			return isset( $settings[ $key ] ) ? $settings[ $key ] : $default;
 		};
 
-		$balance      = null;
-		$sendernames  = array();
+		$sms_balance = null;
+		$wa_balance  = null;
+		$sendernames = array();
 		if ( NimbaSMS_API::is_configured() ) {
 			$account = NimbaSMS_API::get_account();
-			if ( ! is_wp_error( $account ) && isset( $account['balance'] ) ) {
-				$balance = $account['balance'];
+			if ( ! is_wp_error( $account ) ) {
+				if ( isset( $account['sms_balance'] ) ) {
+					$sms_balance = $account['sms_balance'];
+				} elseif ( isset( $account['balance'] ) ) {
+					$sms_balance = $account['balance'];
+				}
+				if ( isset( $account['whatsapp_balance'] ) ) {
+					$wa_balance = $account['whatsapp_balance'];
+				}
 			}
 			$sn = NimbaSMS_API::get_sendernames();
 			if ( ! is_wp_error( $sn ) && isset( $sn['results'] ) && is_array( $sn['results'] ) ) {
-				$sendernames = $sn['results'];
+				// Only approved sender names are usable.
+				$sendernames = array_values(
+					array_filter(
+						$sn['results'],
+						function ( $item ) {
+							return ! isset( $item['status'] ) || 'accepted' === $item['status'];
+						}
+					)
+				);
 			}
 		}
 		?>
-		<?php if ( null !== $balance ) : ?>
+		<?php if ( null !== $sms_balance || null !== $wa_balance ) : ?>
 			<p style="font-size:14px;">
-				<strong><?php esc_html_e( 'Solde du compte :', 'nimbasms' ); ?></strong>
-				<?php echo esc_html( number_format_i18n( (float) $balance ) ); ?> <?php esc_html_e( 'SMS', 'nimbasms' ); ?>
+				<?php if ( null !== $sms_balance ) : ?>
+					<strong><?php esc_html_e( 'Solde SMS :', 'nimbasms' ); ?></strong>
+					<?php echo esc_html( number_format_i18n( (float) $sms_balance ) ); ?>
+				<?php endif; ?>
+				<?php if ( null !== $wa_balance ) : ?>
+					&nbsp;•&nbsp;<strong><?php esc_html_e( 'Solde WhatsApp :', 'nimbasms' ); ?></strong>
+					<?php echo esc_html( number_format_i18n( (float) $wa_balance ) ); ?>
+				<?php endif; ?>
 			</p>
 		<?php endif; ?>
 
@@ -238,6 +291,26 @@ class NimbaSMS_Admin {
 				</tr>
 			</table>
 
+			<h2><?php esc_html_e( 'WhatsApp', 'nimbasms' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Canal WhatsApp', 'nimbasms' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="wa_enabled" value="1" <?php checked( $get( 'wa_enabled' ) ); ?>> <?php esc_html_e( 'Activer l’envoi via WhatsApp (nécessite un sender WhatsApp validé et des templates approuvés par Meta)', 'nimbasms' ); ?></label>
+						<p class="description">
+							<?php esc_html_e( 'Les templates se créent et se soumettent à Meta depuis votre dashboard Nimba SMS. Seuls les templates au statut « Actif » peuvent être utilisés.', 'nimbasms' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="wa_default_template"><?php esc_html_e( 'Template par défaut', 'nimbasms' ); ?></label></th>
+					<td>
+						<input name="wa_default_template" id="wa_default_template" type="text" class="regular-text" value="<?php echo esc_attr( $get( 'wa_default_template' ) ); ?>" placeholder="ma_notification">
+						<p class="description"><?php esc_html_e( 'Nom exact du template validé (sensible à la casse).', 'nimbasms' ); ?></p>
+					</td>
+				</tr>
+			</table>
+
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<h2><?php esc_html_e( 'WooCommerce', 'nimbasms' ); ?></h2>
 				<table class="form-table" role="presentation">
@@ -265,8 +338,27 @@ class NimbaSMS_Admin {
 								</label>
 							</th>
 							<td>
+								<?php
+								$chan       = isset( $settings['wc_channels'][ $status ] ) ? $settings['wc_channels'][ $status ] : 'sms';
+								$wa_tpl     = isset( $settings['wa_wc_templates'][ $status ] ) ? $settings['wa_wc_templates'][ $status ] : '';
+								$wa_vars    = isset( $settings['wa_wc_variables'][ $status ] ) ? $settings['wa_wc_variables'][ $status ] : '';
+								?>
+								<p>
+									<label>
+										<?php esc_html_e( 'Canal :', 'nimbasms' ); ?>
+										<select name="wc_channels[<?php echo esc_attr( $status ); ?>]">
+											<option value="sms" <?php selected( $chan, 'sms' ); ?>><?php esc_html_e( 'SMS', 'nimbasms' ); ?></option>
+											<option value="whatsapp" <?php selected( $chan, 'whatsapp' ); ?>><?php esc_html_e( 'WhatsApp (repli SMS en cas d’échec)', 'nimbasms' ); ?></option>
+										</select>
+									</label>
+								</p>
 								<textarea name="wc_templates[<?php echo esc_attr( $status ); ?>]" id="wc_tpl_<?php echo esc_attr( $status ); ?>" class="large-text" rows="2"><?php echo esc_textarea( $wc_templates[ $status ] ); ?></textarea>
-								<p class="description"><?php esc_html_e( 'Variables : {site} {order_id} {total} {first_name} {last_name} {status}', 'nimbasms' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Message SMS (et repli WhatsApp). Variables : {site} {order_id} {total} {first_name} {last_name} {status}', 'nimbasms' ); ?></p>
+								<p>
+									<input type="text" name="wa_wc_templates[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_tpl ); ?>" placeholder="<?php esc_attr_e( 'Template WhatsApp (si canal WhatsApp)', 'nimbasms' ); ?>">
+									<input type="text" name="wa_wc_variables[<?php echo esc_attr( $status ); ?>]" class="regular-text" value="<?php echo esc_attr( $wa_vars ); ?>" placeholder="{order_id}|{total}">
+								</p>
+								<p class="description"><?php esc_html_e( 'Variables du template WhatsApp, séparées par | et dans l’ordre de {{1}}, {{2}}, …', 'nimbasms' ); ?></p>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -289,15 +381,32 @@ class NimbaSMS_Admin {
 			<?php wp_nonce_field( 'nimbasms_manual_send', 'nimbasms_nonce' ); ?>
 			<table class="form-table" role="presentation">
 				<tr>
+					<th scope="row"><label for="sms_channel"><?php esc_html_e( 'Canal', 'nimbasms' ); ?></label></th>
+					<td>
+						<select name="sms_channel" id="sms_channel" onchange="document.getElementById('nimbasms-wa-fields').style.display = this.value === 'whatsapp' ? '' : 'none'; document.getElementById('nimbasms-sms-fields').style.display = this.value === 'whatsapp' ? 'none' : '';">
+							<option value="sms"><?php esc_html_e( 'SMS', 'nimbasms' ); ?></option>
+							<option value="whatsapp"><?php esc_html_e( 'WhatsApp (template)', 'nimbasms' ); ?></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<th scope="row"><label for="sms_to"><?php esc_html_e( 'Destinataire(s)', 'nimbasms' ); ?></label></th>
 					<td>
 						<input name="sms_to" id="sms_to" type="text" class="large-text" placeholder="624000000, 625000000" required>
 						<p class="description"><?php esc_html_e( 'Un ou plusieurs numéros séparés par des virgules.', 'nimbasms' ); ?></p>
 					</td>
 				</tr>
-				<tr>
+				<tr id="nimbasms-sms-fields">
 					<th scope="row"><label for="sms_message"><?php esc_html_e( 'Message', 'nimbasms' ); ?></label></th>
-					<td><textarea name="sms_message" id="sms_message" class="large-text" rows="5" maxlength="459" required></textarea></td>
+					<td><textarea name="sms_message" id="sms_message" class="large-text" rows="5" maxlength="1071"></textarea>
+					<p class="description"><?php esc_html_e( 'Jusqu’à 1071 caractères (7 SMS).', 'nimbasms' ); ?></p></td>
+				</tr>
+				<tr id="nimbasms-wa-fields" style="display:none;">
+					<th scope="row"><?php esc_html_e( 'Template WhatsApp', 'nimbasms' ); ?></th>
+					<td>
+						<input type="text" name="wa_template" class="regular-text" placeholder="<?php esc_attr_e( 'Nom du template validé', 'nimbasms' ); ?>">
+						<input type="text" name="wa_variables" class="regular-text" placeholder="<?php esc_attr_e( 'Variables séparées par | (ordre de {{1}}, {{2}}…)', 'nimbasms' ); ?>">
+					</td>
 				</tr>
 			</table>
 			<p class="submit">
@@ -317,6 +426,7 @@ class NimbaSMS_Admin {
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Date', 'nimbasms' ); ?></th>
+					<th><?php esc_html_e( 'Canal', 'nimbasms' ); ?></th>
 					<th><?php esc_html_e( 'Destinataires', 'nimbasms' ); ?></th>
 					<th><?php esc_html_e( 'Message', 'nimbasms' ); ?></th>
 					<th><?php esc_html_e( 'Statut', 'nimbasms' ); ?></th>
@@ -324,11 +434,12 @@ class NimbaSMS_Admin {
 			</thead>
 			<tbody>
 				<?php if ( empty( $rows ) ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'Aucun envoi pour le moment.', 'nimbasms' ); ?></td></tr>
+					<tr><td colspan="5"><?php esc_html_e( 'Aucun envoi pour le moment.', 'nimbasms' ); ?></td></tr>
 				<?php else : ?>
 					<?php foreach ( $rows as $row ) : ?>
 						<tr>
 							<td><?php echo esc_html( $row->created_at ); ?></td>
+							<td><?php echo esc_html( isset( $row->channel ) ? strtoupper( $row->channel ) : 'SMS' ); ?></td>
 							<td><?php echo esc_html( $row->recipients ); ?></td>
 							<td><?php echo esc_html( wp_trim_words( $row->message, 20 ) ); ?></td>
 							<td>

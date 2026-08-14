@@ -39,8 +39,10 @@ class NimbaSMS_Logger {
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			recipients TEXT NOT NULL,
 			message TEXT NOT NULL,
+			channel VARCHAR(20) NOT NULL DEFAULT 'sms',
 			status VARCHAR(40) NOT NULL DEFAULT '',
 			message_id VARCHAR(100) NOT NULL DEFAULT '',
+			message_cost INT UNSIGNED NOT NULL DEFAULT 0,
 			error TEXT NULL,
 			created_at DATETIME NOT NULL,
 			PRIMARY KEY  (id),
@@ -56,8 +58,9 @@ class NimbaSMS_Logger {
 	 * @param array          $numbers Recipients.
 	 * @param string         $message Message body.
 	 * @param array|WP_Error $result  API result.
+	 * @param string         $channel Channel used (sms, whatsapp).
 	 */
-	public static function log( $numbers, $message, $result ) {
+	public static function log( $numbers, $message, $result, $channel = 'sms' ) {
 		global $wpdb;
 
 		$is_error = is_wp_error( $result );
@@ -65,14 +68,16 @@ class NimbaSMS_Logger {
 		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			self::table(),
 			array(
-				'recipients' => implode( ', ', array_map( 'sanitize_text_field', $numbers ) ),
-				'message'    => sanitize_textarea_field( $message ),
-				'status'     => $is_error ? 'error' : ( isset( $result['status'] ) ? sanitize_text_field( (string) $result['status'] ) : 'sent' ),
-				'message_id' => ( ! $is_error && isset( $result['messageid'] ) ) ? sanitize_text_field( (string) $result['messageid'] ) : '',
-				'error'      => $is_error ? $result->get_error_message() : null,
-				'created_at' => current_time( 'mysql' ),
+				'recipients'   => implode( ', ', array_map( 'sanitize_text_field', $numbers ) ),
+				'message'      => sanitize_textarea_field( $message ),
+				'channel'      => sanitize_key( $channel ),
+				'status'       => $is_error ? 'error' : ( isset( $result['status'] ) ? sanitize_text_field( (string) $result['status'] ) : 'sent' ),
+				'message_id'   => ( ! $is_error && isset( $result['messageid'] ) ) ? sanitize_text_field( (string) $result['messageid'] ) : '',
+				'message_cost' => ( ! $is_error && isset( $result['message_cost'] ) ) ? absint( $result['message_cost'] ) : 0,
+				'error'        => $is_error ? $result->get_error_message() : null,
+				'created_at'   => current_time( 'mysql' ),
 			),
-			array( '%s', '%s', '%s', '%s', '%s', '%s' )
+			array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
 		);
 	}
 
