@@ -77,6 +77,8 @@ class NimbaSMS_Admin {
 			$settings['notify_new_comment']        = ! empty( $_POST['notify_new_comment'] ) ? 1 : 0;
 			$settings['wc_notify_admin_new_order'] = ! empty( $_POST['wc_notify_admin_new_order'] ) ? 1 : 0;
 
+			$settings['tfa_enabled'] = ! empty( $_POST['tfa_enabled'] ) ? 1 : 0;
+
 			$settings['forms_admin_sms']        = ! empty( $_POST['forms_admin_sms'] ) ? 1 : 0;
 			$settings['forms_visitor_sms']      = ! empty( $_POST['forms_visitor_sms'] ) ? 1 : 0;
 			$settings['forms_phone_field']      = isset( $_POST['forms_phone_field'] ) ? sanitize_text_field( wp_unslash( $_POST['forms_phone_field'] ) ) : '';
@@ -305,6 +307,19 @@ class NimbaSMS_Admin {
 					<td>
 						<label><input type="checkbox" name="notify_new_user" value="1" <?php checked( $get( 'notify_new_user' ) ); ?>> <?php esc_html_e( 'Nouvel utilisateur inscrit', 'nimbasms' ); ?></label><br>
 						<label><input type="checkbox" name="notify_new_comment" value="1" <?php checked( $get( 'notify_new_comment' ) ); ?>> <?php esc_html_e( 'Nouveau commentaire', 'nimbasms' ); ?></label>
+					</td>
+				</tr>
+			</table>
+
+			<h2><?php esc_html_e( 'Connexion — double authentification (2FA)', 'nimbasms' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( '2FA par SMS', 'nimbasms' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="tfa_enabled" value="1" <?php checked( $get( 'tfa_enabled' ) ); ?>> <?php esc_html_e( 'Exiger un code SMS à la connexion des administrateurs', 'nimbasms' ); ?></label>
+						<p class="description">
+							<?php esc_html_e( 'Chaque administrateur doit renseigner son numéro dans son profil (section Nimba SMS). Sans numéro renseigné, la connexion reste classique — pensez à remplir les profils avant d’activer. En cas de blocage, ajoutez define( \'NIMBASMS_DISABLE_2FA\', true ); dans wp-config.php pour désactiver temporairement.', 'nimbasms' ); ?>
+						</p>
 					</td>
 				</tr>
 			</table>

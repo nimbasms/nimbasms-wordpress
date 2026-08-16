@@ -4,7 +4,7 @@ Tags: sms, whatsapp, woocommerce, notifications, guinea
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ Connect WordPress to Nimba SMS, the business communication platform: WooCommerce
 * **WooCommerce**: for each order status (processing, completed, cancelled), enable SMS, WhatsApp, or both, with customizable message templates. If WhatsApp is the only enabled channel and sending fails, the SMS message is sent automatically as a fallback. The store administrator can also receive an SMS for every new order.
 * **WhatsApp**: send messages through your Meta-approved WhatsApp Business templates (created from your Nimba SMS dashboard), with dynamic variables.
 * **WordPress notifications**: SMS to the administrator on new user registration or new comment.
+* **Two-factor authentication (2FA)**: require a 6-digit SMS code at wp-admin login for administrators. Codes expire after 10 minutes, resends are rate-limited, and brute force is blocked after 5 attempts. Per-user phone numbers in the user profile; a `NIMBASMS_DISABLE_2FA` constant provides an emergency switch.
 * **Contact Form 7 and WPForms**: SMS to the administrator on each form submission, and an optional confirmation SMS to the visitor when the form contains a phone field (auto-detected, or set the field name in the settings). Customizable messages.
 * **Manual sending**: send an SMS or a WhatsApp template message to one or several numbers directly from the admin.
 * **Send log**: history of sent messages with their delivery status, updated in real time through the Nimba SMS delivery webhook (URL provided in the settings, to paste into the "URL Webhook" field at https://www.nimbasms.com/app/api-keys).
@@ -76,6 +77,9 @@ See the network coverage on www.nimbasms.com.
 
 == Changelog ==
 
+= 1.2.0 =
+* SMS two-factor authentication at login for administrators: one-time 6-digit codes, 10-minute expiry, resend rate-limiting, attempt limiting, per-user phone profile field, and an emergency disable constant.
+
 = 1.1.0 =
 * Contact Form 7 and WPForms integration: administrator SMS on each submission, optional visitor confirmation SMS with automatic phone field detection, customizable messages, and new developer filters (`nimbasms_forms_replacements`, `nimbasms_forms_visitor_phone`).
 
@@ -84,5 +88,5 @@ See the network coverage on www.nimbasms.com.
 
 == Upgrade Notice ==
 
-= 1.1.0 =
-Adds Contact Form 7 and WPForms integration.
+= 1.2.0 =
+Adds SMS two-factor authentication at login.
