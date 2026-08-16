@@ -27,9 +27,10 @@ class NimbaSMS_Forms {
 			return;
 		}
 
-		// Contact Form 7.
+		// Contact Form 7: wpcf7_submit fires on every submission, even when the
+		// notification email fails (common on servers without mail configured).
 		if ( class_exists( 'WPCF7' ) ) {
-			add_action( 'wpcf7_mail_sent', array( __CLASS__, 'on_cf7_submission' ), 10, 1 );
+			add_action( 'wpcf7_submit', array( __CLASS__, 'on_cf7_submission' ), 10, 2 );
 		}
 
 		// WPForms (Lite or Pro).
@@ -161,8 +162,15 @@ class NimbaSMS_Forms {
 	 * Contact Form 7 submission handler.
 	 *
 	 * @param WPCF7_ContactForm $contact_form Submitted form.
+	 * @param array             $result       Submission result (status, message).
 	 */
-	public static function on_cf7_submission( $contact_form ) {
+	public static function on_cf7_submission( $contact_form, $result = array() ) {
+		// Only for accepted submissions: mail sent, or mail failed after a valid submission.
+		$status = isset( $result['status'] ) ? $result['status'] : '';
+		if ( ! in_array( $status, array( 'mail_sent', 'mail_failed' ), true ) ) {
+			return;
+		}
+
 		$values     = array();
 		$submission = class_exists( 'WPCF7_Submission' ) ? WPCF7_Submission::get_instance() : null;
 
